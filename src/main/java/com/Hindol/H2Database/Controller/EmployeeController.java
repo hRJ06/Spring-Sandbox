@@ -2,9 +2,13 @@ package com.Hindol.H2Database.Controller;
 
 import com.Hindol.H2Database.DTO.EmployeeDTO;
 import com.Hindol.H2Database.Service.EmployeeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -16,7 +20,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping("/create")
+    @PostMapping(path = "/create")
     private EmployeeDTO createEmployee(@RequestBody EmployeeDTO employeeDTO) {
         return this.employeeService.createEmployee(employeeDTO);
     }
@@ -24,5 +28,37 @@ public class EmployeeController {
     @GetMapping
     private List<EmployeeDTO> getAllEmployees() {
         return this.employeeService.getAllEmployees();
+    }
+
+    @GetMapping(path = "/{employeeId}")
+    private ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Integer employeeId) {
+        Optional<EmployeeDTO> employeeDTO = this.employeeService.getEmployeeById(employeeId);
+        return employeeDTO.map(employee -> ResponseEntity.ok(employee)).orElse(ResponseEntity.notFound().build());
+    }
+
+    /* TO UPDATE ENTIRE EMPLOYEE */
+    @PutMapping(path = "/{employeeId}")
+    private ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Integer employeeId, @RequestBody EmployeeDTO employeeDTO) {
+        EmployeeDTO updatedEmployeeDTO = this.employeeService.updateEmployee(employeeId, employeeDTO);
+        if(updatedEmployeeDTO != null) {
+            return ResponseEntity.ok(updatedEmployeeDTO);
+        }
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @DeleteMapping(path = "/{employeeId}")
+    private ResponseEntity<Boolean> deleteEmployee(@PathVariable Integer employeeId) {
+        Boolean deleted = this.employeeService.deleteEmployee(employeeId);
+        return deleted ? ResponseEntity.ok(true) : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping(path = "/{employeeId}")
+    private ResponseEntity<EmployeeDTO> partialUpdateEmployee(@PathVariable(name = "employeeId") Integer id, @RequestBody Map<String, Object> fieldsToBeUpdated) {
+        EmployeeDTO updatedEmployeeDTO = this.employeeService.partialUpdateEmployee(id, fieldsToBeUpdated);
+        if(updatedEmployeeDTO != null) {
+            return ResponseEntity.ok(updatedEmployeeDTO);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

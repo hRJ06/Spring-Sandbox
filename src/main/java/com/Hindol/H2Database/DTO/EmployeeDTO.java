@@ -1,5 +1,6 @@
 package com.Hindol.H2Database.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,5 +11,7 @@ public class EmployeeDTO {
     private String name;
     private String email;
     private LocalDate dateOfJoining;
+    @JsonProperty("active")
+    private Boolean isActive;
 
 }
