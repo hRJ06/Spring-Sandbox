@@ -2,6 +2,7 @@ package com.Hindol.H2Database.Service;
 
 import com.Hindol.H2Database.DTO.EmployeeDTO;
 import com.Hindol.H2Database.Entity.EmployeeEntity;
+import com.Hindol.H2Database.Exception.ResourceNotFoundException;
 import com.Hindol.H2Database.Repository.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.util.ReflectionUtils;
@@ -25,8 +26,9 @@ public class EmployeeService {
         this.modelMapper = modelMapper;
     }
 
-    boolean checkIfEmployeeExits(Integer employeeId) {
-        return this.employeeRepository.existsById(employeeId);
+    void checkIfEmployeeExits(Integer employeeId) {
+       boolean check = this.employeeRepository.existsById(employeeId);
+       if(!check) throw new ResourceNotFoundException("Unable to find Employee with ID : " + employeeId);
     }
 
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
@@ -35,9 +37,9 @@ public class EmployeeService {
         return this.modelMapper.map(savedEmployee, EmployeeDTO.class);
     }
 
-    public Optional<EmployeeDTO> getEmployeeById(Integer employeeId) {
-        Optional<EmployeeEntity> employeeEntity = this.employeeRepository.findById(employeeId);
-        return employeeEntity.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
+    public EmployeeDTO getEmployeeById(Integer employeeId) {
+        checkIfEmployeeExits(employeeId);
+        return this.modelMapper.map(this.employeeRepository.findById(employeeId).get(), EmployeeDTO.class);
     }
     
     public List<EmployeeDTO> getAllEmployees() {
@@ -46,23 +48,20 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployee(Integer employeeId, EmployeeDTO employeeDTO) {
-        boolean check = checkIfEmployeeExits(employeeId);
-        if(!check) return null;
+        checkIfEmployeeExits(employeeId);
         EmployeeEntity savedEmployee = this.modelMapper.map(employeeDTO, EmployeeEntity.class);
         savedEmployee.setId(employeeId);
         return modelMapper.map(this.employeeRepository.save(savedEmployee), EmployeeDTO.class);
     }
 
     public Boolean deleteEmployee(Integer employeeId) {
-        boolean check = checkIfEmployeeExits(employeeId);
-        if(!check) return false;
+        checkIfEmployeeExits(employeeId);
         this.employeeRepository.deleteById(employeeId);
         return true;
     }
 
     public EmployeeDTO partialUpdateEmployee(Integer employeeId, Map<String, Object> fieldsToBeUpdated) {
-        boolean check = checkIfEmployeeExits(employeeId);
-        if(!check) return null;
+        checkIfEmployeeExits(employeeId);
         EmployeeEntity employee = this.employeeRepository.findById(employeeId).get();
         fieldsToBeUpdated.forEach((field, value) -> {
             Field fieldToBeUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class, field);

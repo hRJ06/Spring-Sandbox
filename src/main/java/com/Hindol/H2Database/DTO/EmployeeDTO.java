@@ -13,7 +13,7 @@ public class EmployeeDTO {
     @NotBlank(message = "The name of employee cannot be blank")
     @Size(min = 3, max = 100, message = "Number of characters in the name should be in the range [3, 10]")
     private String name;
-    @Email
+    @Email(message = "The email should be a valid email")
     private String email;
     @NotNull(message = "The age of employee cannot be null")
     @Min(value = 18, message = "The minimum age of employee should be 18")

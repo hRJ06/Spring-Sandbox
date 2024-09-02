@@ -33,8 +33,9 @@ public class EmployeeController {
 
     @GetMapping(path = "/{employeeId}")
     private ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Integer employeeId) {
-        Optional<EmployeeDTO> employeeDTO = this.employeeService.getEmployeeById(employeeId);
-        return employeeDTO.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        EmployeeDTO employeeDTO = this.employeeService.getEmployeeById(employeeId);
+        /* return employeeDTO.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()); */
+        return ResponseEntity.ok(employeeDTO);
     }
 
     /* TO UPDATE ENTIRE EMPLOYEE */
