@@ -1,6 +1,5 @@
 package com.Hindol.H2Database.Entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.Data;
@@ -20,6 +19,9 @@ public class EmployeeEntity {
     private Integer id;
     private String name;
     private String email;
+    private Integer age;
+    private String role;
+    private Double salary;
     private LocalDate dateOfJoining;
     private Boolean isActive;
 }

@@ -2,6 +2,7 @@ package com.Hindol.H2Database.Controller;
 
 import com.Hindol.H2Database.DTO.EmployeeDTO;
 import com.Hindol.H2Database.Service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class EmployeeController {
     }
 
     @PostMapping(path = "/create")
-    private EmployeeDTO createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    private EmployeeDTO createEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
         return this.employeeService.createEmployee(employeeDTO);
     }
 
@@ -33,12 +34,12 @@ public class EmployeeController {
     @GetMapping(path = "/{employeeId}")
     private ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Integer employeeId) {
         Optional<EmployeeDTO> employeeDTO = this.employeeService.getEmployeeById(employeeId);
-        return employeeDTO.map(employee -> ResponseEntity.ok(employee)).orElse(ResponseEntity.notFound().build());
+        return employeeDTO.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     /* TO UPDATE ENTIRE EMPLOYEE */
     @PutMapping(path = "/{employeeId}")
-    private ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Integer employeeId, @RequestBody EmployeeDTO employeeDTO) {
+    private ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Integer employeeId, @RequestBody @Valid EmployeeDTO employeeDTO) {
         EmployeeDTO updatedEmployeeDTO = this.employeeService.updateEmployee(employeeId, employeeDTO);
         if(updatedEmployeeDTO != null) {
             return ResponseEntity.ok(updatedEmployeeDTO);
