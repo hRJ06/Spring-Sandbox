@@ -1,6 +1,7 @@
 package com.Hindol.Week3.Repository;
 
 import com.Hindol.Week3.Entity.ProductEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,7 +30,13 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @Query(value = "SELECT * FROM product_table WHERE product_title = ?1 AND price = ?2", nativeQuery = true)
     Optional<ProductEntity> findByTitleAndPrice(String title, BigDecimal price);
 
+    /* SORTING */
     List<ProductEntity> findByTitleOrderByPrice(String title);
     List<ProductEntity> findByOrderByPrice();
     List<ProductEntity> findBy(Sort sort);
+
+    /* PAGINATION */
+    List<ProductEntity> findByTitle(String tile, Pageable pageable);
+    List<ProductEntity> findByTitleContainingIgnoreCase(String title, Pageable p);
+
 }
