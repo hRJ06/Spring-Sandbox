@@ -1,5 +1,7 @@
 package com.Hindol.Week2HomeWork.DTO;
 
+import com.Hindol.Week2HomeWork.Annotation.DepartmentNoValidation;
+import com.Hindol.Week2HomeWork.Annotation.DepartmentPasswordValidation;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,4 +22,8 @@ public class DepartmentDTO {
     @PastOrPresent
     @NotNull
     private LocalDateTime createdAt;
+    @DepartmentNoValidation
+    private Long no;
+    @DepartmentPasswordValidation
+    private String password;
 }

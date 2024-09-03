@@ -18,4 +18,6 @@ public class DepartmentEntity {
     private String title;
     private Boolean isActive;
     private LocalDateTime createdAt;
+    private Long no;
+    private String password;
 }
