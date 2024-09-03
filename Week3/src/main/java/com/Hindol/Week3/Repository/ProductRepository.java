@@ -1,6 +1,7 @@
 package com.Hindol.Week3.Repository;
 
 import com.Hindol.Week3.Entity.ProductEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -27,4 +28,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     /* @Query("SELECT P FROM ProductEntity P WHERE P.title = :title AND P.price = :price") */
     @Query(value = "SELECT * FROM product_table WHERE product_title = ?1 AND price = ?2", nativeQuery = true)
     Optional<ProductEntity> findByTitleAndPrice(String title, BigDecimal price);
+
+    List<ProductEntity> findByTitleOrderByPrice(String title);
+    List<ProductEntity> findByOrderByPrice();
+    List<ProductEntity> findBy(Sort sort);
 }
