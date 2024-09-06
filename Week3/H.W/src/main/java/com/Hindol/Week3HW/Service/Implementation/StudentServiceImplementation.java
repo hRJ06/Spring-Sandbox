@@ -80,7 +80,7 @@ public class StudentServiceImplementation implements StudentService {
     }
 
     @Override
-    public List<ProfessorDTO> getAssignedProfessor(Long studentId) {
+    public List<ProfessorDTO> getAssignedProfessors(Long studentId) {
         checkIfStudentExistsById(studentId);
         StudentEntity student = this.studentRepository.findById(studentId).orElse(null);
         Set<ProfessorEntity> assignedProfessors = student.getProfessors();
