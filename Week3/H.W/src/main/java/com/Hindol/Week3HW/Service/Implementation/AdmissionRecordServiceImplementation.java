@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class AdmissionRecordImplementation implements AdmissionRecordService {
+public class AdmissionRecordServiceImplementation implements AdmissionRecordService {
     private final ModelMapper modelMapper;
     private final StudentRepository studentRepository;
     private final AdmissionRecordRepository admissionRecordRepository;
 
-    public AdmissionRecordImplementation(ModelMapper modelMapper, StudentRepository studentRepository, AdmissionRecordRepository admissionRecordRepository) {
+    public AdmissionRecordServiceImplementation(ModelMapper modelMapper, StudentRepository studentRepository, AdmissionRecordRepository admissionRecordRepository) {
         this.modelMapper = modelMapper;
         this.studentRepository = studentRepository;
         this.admissionRecordRepository = admissionRecordRepository;

@@ -10,7 +10,7 @@ public interface ProfessorService {
     public List<ProfessorDTO> getAllProfessors();
     public ProfessorDTO getProfessorById(Long professorId);
     public ProfessorDTO updateProfessorById(Long professorId, ProfessorDTO professorDTO);
-    public void deleteProfessorById(Long professorId);
+    public Boolean deleteProfessorById(Long professorId);
     public ProfessorDTO createProfessor(ProfessorDTO professorDTO);
     public List<StudentDTO> getAssignedStudents(Long professorId);
     public List<SubjectDTO> getAssignedSubjects(Long professorId);

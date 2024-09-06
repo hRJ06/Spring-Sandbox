@@ -50,9 +50,9 @@ public class ProfessorServiceImplementation implements ProfessorService {
     }
 
     @Override
-    public void deleteProfessorById(Long professorId) {
+    public Boolean deleteProfessorById(Long professorId) {
         checkIfProfessorExistsById(professorId);
-        ProfessorEntity professor = this.professorRepository.findById(professorId).orElse(null);\
+        ProfessorEntity professor = this.professorRepository.findById(professorId).orElse(null);
         for(StudentEntity student : professor.getStudents()) {
             student.getProfessors().remove(professor);
             /* TODO: */
@@ -60,6 +60,7 @@ public class ProfessorServiceImplementation implements ProfessorService {
 
         }
         this.professorRepository.deleteById(professorId);
+        return true;
     }
 
     @Override
@@ -72,7 +73,6 @@ public class ProfessorServiceImplementation implements ProfessorService {
         checkIfProfessorExistsById(professorId);
         ProfessorEntity professor = this.professorRepository.findById(professorId).orElse(null);
         return professor.getStudents().stream().map(studentEntity -> modelMapper.map(studentEntity, StudentDTO.class)).collect(Collectors.toList());
-
     }
 
     @Override
