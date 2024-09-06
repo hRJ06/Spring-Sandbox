@@ -92,7 +92,6 @@ public class SubjectServiceImplementation implements SubjectService {
         ProfessorEntity professor = this.professorRepository.findById(professorId).orElseThrow(() -> new ResourceNotFoundException("No Professor found with ID : " + professorId));
         SubjectEntity subjectEntity = this.subjectRepository.findById(subjectId).orElse(null);
         subjectEntity.setProfessor(professor);
-        professor.getSubjects().add(subjectEntity);
         return modelMapper.map(subjectRepository.save(subjectEntity), SubjectDTO.class);
     }
 
