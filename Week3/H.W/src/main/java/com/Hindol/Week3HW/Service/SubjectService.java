@@ -3,11 +3,10 @@ package com.Hindol.Week3HW.Service;
 import com.Hindol.Week3HW.DTO.ProfessorDTO;
 import com.Hindol.Week3HW.DTO.StudentDTO;
 import com.Hindol.Week3HW.DTO.SubjectDTO;
-import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
-@Service
 public interface SubjectService {
     public List<SubjectDTO> getAllSubjects();
     public SubjectDTO getSubjectById(Long subjectId);

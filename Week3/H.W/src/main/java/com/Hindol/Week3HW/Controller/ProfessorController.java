@@ -28,11 +28,11 @@ public class ProfessorController {
     public ResponseEntity<ProfessorDTO> getProfessorById(@PathVariable Long professorId) {
         return ResponseEntity.ok(professorService.getProfessorById(professorId));
     }
-    @PutMapping("/{professorId")
+    @PutMapping("/{professorId}")
     public ResponseEntity<ProfessorDTO> updateProfessorById(@RequestBody @Valid ProfessorDTO professorDTO, @PathVariable Long professorId) {
         return ResponseEntity.ok(professorService.updateProfessorById(professorId, professorDTO));
     }
-    @DeleteMapping("/{professorId")
+    @DeleteMapping("/{professorId}")
     public ResponseEntity<?> deleteProfessorById(@PathVariable Long professorId) {
         return new ResponseEntity<>(Map.of("success", professorService.deleteProfessorById(professorId)), HttpStatus.OK);
     }

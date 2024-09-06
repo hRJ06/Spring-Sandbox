@@ -12,11 +12,13 @@ import com.Hindol.Week3HW.Repository.StudentRepository;
 import com.Hindol.Week3HW.Repository.SubjectRepository;
 import com.Hindol.Week3HW.Service.StudentService;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class StudentServiceImplementation implements StudentService {
     private final StudentRepository studentRepository;
     private final ProfessorRepository professorRepository;
@@ -75,7 +77,8 @@ public class StudentServiceImplementation implements StudentService {
 
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
-        StudentEntity createdStudent = this.modelMapper.map(studentDTO, StudentEntity.class);
+        StudentEntity student = this.modelMapper.map(studentDTO, StudentEntity.class);
+        StudentEntity createdStudent = studentRepository.save(student);
         return this.modelMapper.map(createdStudent, StudentDTO.class);
     }
 

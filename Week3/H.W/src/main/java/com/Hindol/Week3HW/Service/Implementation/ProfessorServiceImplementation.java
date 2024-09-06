@@ -10,10 +10,12 @@ import com.Hindol.Week3HW.Repository.ProfessorRepository;
 import com.Hindol.Week3HW.Repository.StudentRepository;
 import com.Hindol.Week3HW.Service.ProfessorService;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ProfessorServiceImplementation implements ProfessorService {
     private final ProfessorRepository professorRepository;
     private final StudentRepository studentRepository;

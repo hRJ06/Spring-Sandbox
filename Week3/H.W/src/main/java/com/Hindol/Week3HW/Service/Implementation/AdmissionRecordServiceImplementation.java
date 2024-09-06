@@ -8,11 +8,13 @@ import com.Hindol.Week3HW.Repository.AdmissionRecordRepository;
 import com.Hindol.Week3HW.Repository.StudentRepository;
 import com.Hindol.Week3HW.Service.AdmissionRecordService;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class AdmissionRecordServiceImplementation implements AdmissionRecordService {
     private final ModelMapper modelMapper;
     private final StudentRepository studentRepository;
@@ -35,7 +37,7 @@ public class AdmissionRecordServiceImplementation implements AdmissionRecordServ
         if(admissionRecord.isPresent()) {
             return null;
         }
-        AdmissionRecordEntity admissionRecordEntity = modelMapper.map(admissionRecord, AdmissionRecordEntity.class);
+        AdmissionRecordEntity admissionRecordEntity = modelMapper.map(admissionRecordDTO, AdmissionRecordEntity.class);
         admissionRecordEntity.setStudent(student);
         AdmissionRecordEntity createdAdmissionRecord = this.admissionRecordRepository.save(admissionRecordEntity);
         return modelMapper.map(createdAdmissionRecord, AdmissionRecordDTO.class);

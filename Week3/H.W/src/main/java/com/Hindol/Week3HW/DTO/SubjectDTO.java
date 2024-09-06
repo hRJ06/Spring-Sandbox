@@ -9,7 +9,7 @@ import java.util.Set;
 public class SubjectDTO {
     private Long id;
     private String title;
-    private ProfessorDTO professorDTO;
+    private ProfessorDTO professor;
     @JsonIgnore
     private Set<StudentDTO> students;
 }

@@ -50,6 +50,7 @@ public class SubjectController {
     }
     @PutMapping("/{subjectId}/assignProfessor/{professorId}")
     public ResponseEntity<SubjectDTO> assignProfessor(@PathVariable Long subjectId,@PathVariable Long professorId) {
+        System.out.println("HII");
         return ResponseEntity.ok(subjectService.assignProfessor(subjectId, professorId));
     }
     @PutMapping("/{subjectId}/enrollStudent/{studentId}")

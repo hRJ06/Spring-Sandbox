@@ -12,11 +12,13 @@ import com.Hindol.Week3HW.Repository.StudentRepository;
 import com.Hindol.Week3HW.Repository.SubjectRepository;
 import com.Hindol.Week3HW.Service.SubjectService;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class SubjectServiceImplementation implements SubjectService {
     private final SubjectRepository subjectRepository;
     private final ProfessorRepository professorRepository;
