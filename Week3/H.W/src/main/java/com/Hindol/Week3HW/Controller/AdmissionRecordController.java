@@ -30,7 +30,7 @@ public class AdmissionRecordController {
     }
 
     @GetMapping("/{enrollmentId}")
-    public ResponseEntity<AdmissionRecordDTO> etEnrolledStudentRecordById(@PathVariable Long enrollmentId) {
+    public ResponseEntity<AdmissionRecordDTO> getEnrolledStudentRecordById(@PathVariable Long enrollmentId) {
         return ResponseEntity.ok(admissionRecordService.getEnrolledStudentRecordById(enrollmentId));
     }
 

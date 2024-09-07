@@ -27,7 +27,6 @@ public class AdmissionRecordServiceImplementation implements AdmissionRecordServ
         this.admissionRecordRepository = admissionRecordRepository;
     }
 
-    @Transactional
     private void checkIfAdmissionRecordExists(Long admissionRecordId) {
         boolean check = this.admissionRecordRepository.existsById(admissionRecordId);
         if(!check) throw new ResourceNotFoundException("No Admission Record found with ID : " + admissionRecordId);
