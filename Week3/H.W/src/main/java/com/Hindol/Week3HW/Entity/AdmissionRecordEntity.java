@@ -11,9 +11,9 @@ import lombok.Setter;
 public class AdmissionRecordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private Integer fees;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "student_id")
     private StudentEntity student;
 }

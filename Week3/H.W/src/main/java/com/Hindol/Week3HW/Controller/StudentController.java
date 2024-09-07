@@ -34,7 +34,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.updateStudentById(studentId, studentDTO));
     }
     @DeleteMapping("/{studentId}")
-    public ResponseEntity<?> deleteStudentById(@PathVariable Long studentId, @RequestBody @Valid StudentDTO studentDTO) {
+    public ResponseEntity<?> deleteStudentById(@PathVariable Long studentId) {
         return new ResponseEntity<>(Map.of("success", studentService.deleteStudentById(studentId)), HttpStatus.OK);
     }
     @PostMapping

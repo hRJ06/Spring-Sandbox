@@ -15,5 +15,6 @@ public class ProfessorDTO {
     private String title;
     @JsonIgnore
     private Set<SubjectDTO> subjects;
+    @JsonIgnore
     private Set<StudentDTO> students;
 }

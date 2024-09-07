@@ -34,8 +34,8 @@ public class AdmissionRecordController {
         return ResponseEntity.ok(admissionRecordService.getEnrolledStudentRecordById(enrollmentId));
     }
 
-    @DeleteMapping("/{enrollmentId}")
-    public ResponseEntity<?> deleteStudentEnrollmentDetails(@PathVariable Long enrollmentId) {
-        return new ResponseEntity<>(Map.of("success", admissionRecordService.deleteStudentEnrollmentDetails(enrollmentId)), HttpStatus.OK);
+    @DeleteMapping("/{studentId}")
+    public ResponseEntity<?> deleteStudentEnrollmentDetails(@PathVariable Long studentId) {
+        return new ResponseEntity<>(Map.of("success", admissionRecordService.deleteStudentEnrollmentDetails(studentId)), HttpStatus.OK);
     }
 }

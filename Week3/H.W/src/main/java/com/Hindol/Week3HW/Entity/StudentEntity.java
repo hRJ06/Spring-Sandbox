@@ -14,12 +14,12 @@ import java.util.Set;
 public class StudentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false, length = 100)
     private String name;
 
-    @OneToOne(mappedBy = "student")
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private AdmissionRecordEntity admissionRecord;
 
     @ManyToMany(mappedBy = "students")

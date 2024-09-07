@@ -8,5 +8,5 @@ public interface AdmissionRecordService {
     public AdmissionRecordDTO enrollStudent(Long studentId, AdmissionRecordDTO admissionRecordDTO);
     public List<AdmissionRecordDTO> getAllEnrolledStudents();
     public AdmissionRecordDTO getEnrolledStudentRecordById(Long enrollmentId);
-    public Boolean deleteStudentEnrollmentDetails(Long enrollmentId);
+    public Boolean deleteStudentEnrollmentDetails(Long studentId);
 }
