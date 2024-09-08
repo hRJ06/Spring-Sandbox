@@ -3,6 +3,8 @@ package com.Hindol.Auditing.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Audited
 /* @EntityListeners(AuditingEntityListener.class) */
 public class PostEntity extends AuditableEntity {
 
@@ -24,6 +27,7 @@ public class PostEntity extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    /* @NotAudited */
     private String description;
 
     /*
