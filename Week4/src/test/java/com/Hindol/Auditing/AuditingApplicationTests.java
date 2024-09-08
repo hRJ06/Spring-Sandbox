@@ -30,14 +30,14 @@ class AuditingApplicationTests {
 	@Test
 	@Order(2)
 	void getDepartmentByIdTest() {
-		DepartmentDTO departmentDTO = departmentClient.getDepartmentById(1L);
+		DepartmentDTO departmentDTO = departmentClient.getDepartmentById(100L);
 		System.out.println(departmentDTO);
 	}
 
 	@Test
 	@Order(1)
 	void createDepartmentTest() {
-		DepartmentDTO departmentDTO = new DepartmentDTO(null, "CIB", true, LocalDateTime.of(2024, 8, 8, 0, 0), 13L, "cI_B123456");
+		DepartmentDTO departmentDTO = new DepartmentDTO(null, "CCB", true, LocalDateTime.of(2024, 8, 8, 0, 0), 13L, "cI_B123456");
 		DepartmentDTO createdDepartment = departmentClient.createNewDepartment(departmentDTO);
 		System.out.println(createdDepartment);
 	}
