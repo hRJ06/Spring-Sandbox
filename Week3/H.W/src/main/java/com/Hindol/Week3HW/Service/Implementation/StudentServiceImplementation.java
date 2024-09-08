@@ -12,9 +12,12 @@ import com.Hindol.Week3HW.Repository.StudentRepository;
 import com.Hindol.Week3HW.Repository.SubjectRepository;
 import com.Hindol.Week3HW.Service.StudentService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,10 +54,15 @@ public class StudentServiceImplementation implements StudentService {
     }
 
     @Override
-    public StudentDTO updateStudentById(Long studentId, StudentDTO studentDTO) {
+    public StudentDTO updateStudentById(Long studentId, Map<String, Object> fieldsToBeChanged) {
         checkIfStudentExistsById(studentId);
-        StudentEntity student = this.modelMapper.map(studentDTO, StudentEntity.class);
-        student.setId(studentId);
+        StudentEntity student = studentRepository.findById(studentId).orElse(null);
+        fieldsToBeChanged.forEach((field, value) -> {
+            Field fieldToBeChanged = ReflectionUtils.findRequiredField(StudentEntity.class, field);
+            fieldToBeChanged.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeChanged, student, value);
+
+        });
         return this.modelMapper.map(this.studentRepository.save(student), StudentDTO.class);
     }
 

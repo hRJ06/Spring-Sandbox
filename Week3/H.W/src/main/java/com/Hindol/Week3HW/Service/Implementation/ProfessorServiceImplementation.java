@@ -10,9 +10,12 @@ import com.Hindol.Week3HW.Repository.ProfessorRepository;
 import com.Hindol.Week3HW.Repository.StudentRepository;
 import com.Hindol.Week3HW.Service.ProfessorService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,11 +47,15 @@ public class ProfessorServiceImplementation implements ProfessorService {
     }
 
     @Override
-    public ProfessorDTO updateProfessorById(Long professorId, ProfessorDTO professorDTO) {
+    public ProfessorDTO updateProfessorById(Long professorId, Map<String, Object> fieldsToBeChanged) {
         checkIfProfessorExistsById(professorId);
-        ProfessorEntity professor = this.modelMapper.map(professorDTO, ProfessorEntity.class);
-        professor.setId(professorId);
-        return modelMapper.map(this.professorRepository.save(professor), ProfessorDTO.class);
+        ProfessorEntity professorEntity = this.professorRepository.findById(professorId).orElse(null);
+        fieldsToBeChanged.forEach((field, value) -> {
+            Field fieldToBeChanged = ReflectionUtils.findRequiredField(ProfessorEntity.class, field);
+            fieldToBeChanged.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeChanged, professorEntity, value);
+        });
+        return this.modelMapper.map(this.professorRepository.save(professorEntity), ProfessorDTO.class);
     }
 
     @Override

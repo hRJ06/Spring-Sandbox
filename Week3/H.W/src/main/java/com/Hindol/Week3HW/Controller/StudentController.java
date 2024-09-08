@@ -30,8 +30,8 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudentById(studentId));
     }
     @PutMapping("/{studentId}")
-    public ResponseEntity<StudentDTO> updatedStudentById(@PathVariable Long studentId, @RequestBody @Valid StudentDTO studentDTO) {
-        return ResponseEntity.ok(studentService.updateStudentById(studentId, studentDTO));
+    public ResponseEntity<StudentDTO> updatedStudentById(@PathVariable Long studentId, @RequestBody Map<String, Object> fieldsToBeChanged) {
+        return ResponseEntity.ok(studentService.updateStudentById(studentId, fieldsToBeChanged));
     }
     @DeleteMapping("/{studentId}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long studentId) {

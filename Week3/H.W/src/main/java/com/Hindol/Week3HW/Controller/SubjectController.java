@@ -29,8 +29,8 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getSubjectById(subjectId));
     }
     @PutMapping("/{subjectId}")
-    public ResponseEntity<SubjectDTO> updateSubjectById(@PathVariable Long subjectId, @RequestBody @Valid SubjectDTO subjectDTO) {
-        return ResponseEntity.ok(subjectService.updateSubjectById(subjectId, subjectDTO));
+    public ResponseEntity<SubjectDTO> updateSubjectById(@PathVariable Long subjectId, @RequestBody Map<String, Object> fieldsToBeChanged) {
+        return ResponseEntity.ok(subjectService.updateSubjectById(subjectId, fieldsToBeChanged));
     }
     @DeleteMapping("/{subjectId}")
     public ResponseEntity<?> deleteSubjectById(@PathVariable Long subjectId) {

@@ -6,11 +6,12 @@ import com.Hindol.Week3HW.DTO.SubjectDTO;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface SubjectService {
     public List<SubjectDTO> getAllSubjects();
     public SubjectDTO getSubjectById(Long subjectId);
-    public SubjectDTO updateSubjectById(Long subjectId, SubjectDTO subjectDTO);
+    public SubjectDTO updateSubjectById(Long subjectId, Map<String, Object> fieldsToBeChanged);
     public Boolean deleteSubjectById(Long subjectId);
     public SubjectDTO createSubject(SubjectDTO subjectDTO);
     public ProfessorDTO getAssignedProfessor(Long SubjectId);

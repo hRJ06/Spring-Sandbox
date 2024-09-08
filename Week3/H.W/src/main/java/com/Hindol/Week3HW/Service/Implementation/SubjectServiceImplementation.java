@@ -12,9 +12,12 @@ import com.Hindol.Week3HW.Repository.StudentRepository;
 import com.Hindol.Week3HW.Repository.SubjectRepository;
 import com.Hindol.Week3HW.Service.SubjectService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,10 +55,16 @@ public class SubjectServiceImplementation implements SubjectService {
     }
 
     @Override
-    public SubjectDTO updateSubjectById(Long subjectId, SubjectDTO subjectDTO) {
+    public SubjectDTO updateSubjectById(Long subjectId, Map<String, Object> fieldsToBeChanged) {
         checkIfSubjectExitsById(subjectId);
-        subjectDTO.setId(subjectId);
-        return modelMapper.map(subjectRepository.save(modelMapper.map(subjectDTO, SubjectEntity.class)), SubjectDTO.class);
+        SubjectEntity subject = subjectRepository.findById(subjectId).orElse(null);
+        fieldsToBeChanged.forEach((field, value) -> {
+            Field fieldToBeChanged = ReflectionUtils.findRequiredField(StudentEntity.class, field);
+            fieldToBeChanged.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeChanged, subject, value);
+
+        });
+        return this.modelMapper.map(this.subjectRepository.save(subject), SubjectDTO.class);
     }
 
     @Override

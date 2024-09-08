@@ -29,8 +29,8 @@ public class ProfessorController {
         return ResponseEntity.ok(professorService.getProfessorById(professorId));
     }
     @PutMapping("/{professorId}")
-    public ResponseEntity<ProfessorDTO> updateProfessorById(@RequestBody @Valid ProfessorDTO professorDTO, @PathVariable Long professorId) {
-        return ResponseEntity.ok(professorService.updateProfessorById(professorId, professorDTO));
+    public ResponseEntity<ProfessorDTO> updateProfessorById(@RequestBody Map<String, Object> fieldsToBeChanged, @PathVariable Long professorId) {
+        return ResponseEntity.ok(professorService.updateProfessorById(professorId, fieldsToBeChanged));
     }
     @DeleteMapping("/{professorId}")
     public ResponseEntity<?> deleteProfessorById(@PathVariable Long professorId) {
