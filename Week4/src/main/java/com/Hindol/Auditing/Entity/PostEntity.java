@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
-public class PostEntity {
+/* @EntityListeners(AuditingEntityListener.class) */
+public class PostEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +26,18 @@ public class PostEntity {
     private String title;
     private String description;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+    /*
+        @CreatedDate
+        @Column(nullable = false, updatable = false)
+        private LocalDateTime createdDate;
 
-    @LastModifiedDate
-    private LocalDateTime updatedDate;
+        @LastModifiedDate
+        private LocalDateTime updatedDate;
 
-    @CreatedBy
-    private String createdBy;
+        @CreatedBy
+        private String createdBy;
 
-    @LastModifiedBy
-    private String updatedBy;
+        @LastModifiedBy
+        private String updatedBy;
+     */
 }
