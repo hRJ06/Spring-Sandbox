@@ -59,7 +59,7 @@ public class SubjectServiceImplementation implements SubjectService {
         checkIfSubjectExitsById(subjectId);
         SubjectEntity subject = subjectRepository.findById(subjectId).orElse(null);
         fieldsToBeChanged.forEach((field, value) -> {
-            Field fieldToBeChanged = ReflectionUtils.findRequiredField(StudentEntity.class, field);
+            Field fieldToBeChanged = ReflectionUtils.findRequiredField(SubjectEntity.class, field);
             fieldToBeChanged.setAccessible(true);
             ReflectionUtils.setField(fieldToBeChanged, subject, value);
 

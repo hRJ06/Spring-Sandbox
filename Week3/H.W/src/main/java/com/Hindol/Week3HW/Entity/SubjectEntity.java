@@ -3,6 +3,7 @@ package com.Hindol.Week3HW.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.util.Set;
 
@@ -10,7 +11,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "subject")
-public class SubjectEntity {
+@Audited
+public class SubjectEntity extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
