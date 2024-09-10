@@ -21,7 +21,7 @@ public class BookEntity extends AuditableEntity {
     private Long id;
     private String title;
     private String description;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "author_id")
     private AuthorEntity author;
     private LocalDate publishDate;
