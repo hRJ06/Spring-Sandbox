@@ -4,9 +4,7 @@ import com.Hindol.Week3HW.DTO.AuthorDTO;
 import com.Hindol.Week3HW.Entity.AuthorEntity;
 import com.Hindol.Week3HW.Exception.ResourceNotFoundException;
 import com.Hindol.Week3HW.Repository.AuthorRepository;
-import com.Hindol.Week3HW.Repository.BookRepository;
 import com.Hindol.Week3HW.Service.AuthorService;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
@@ -17,11 +15,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class AuthorServiceImplementation implements AuthorService {
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
+
+    public AuthorServiceImplementation(AuthorRepository authorRepository, ModelMapper modelMapper) {
+        this.authorRepository = authorRepository;
+        this.modelMapper = modelMapper;
+    }
 
     private void checkIfAuthorExistsById(Long authorId) {
         boolean check = authorRepository.existsById(authorId);

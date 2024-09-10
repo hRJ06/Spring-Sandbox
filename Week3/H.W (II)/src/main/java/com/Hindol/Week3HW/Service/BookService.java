@@ -11,7 +11,7 @@ public interface BookService {
     public List<BookDTO> getAllBooks();
     public BookDTO createBook(BookDTO bookDTO);
     public BookDTO updatedBookById(Long id, Map<String, Object> fieldsToBeUpdated);
-    public Boolean deleteBookById(Long id);
+    public void deleteBookById(Long id);
     public List<BookDTO> getBooksPublishedAfterDate(LocalDate date);
     public List<BookDTO> getBooksByTitle(String title);
     public List<BookDTO> getBooksByAuthor(Long authorId);

@@ -1,6 +1,7 @@
 package com.Hindol.Week3HW.DTO;
 
-import com.Hindol.Week3HW.Entity.BookEntity;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,6 +13,8 @@ import java.util.List;
 @ToString
 public class AuthorDTO {
     private Long id;
+    @NotNull
+    @Size(min = 3, max = 100, message = "The number of characters in the name of Author should be in the range [3, 100]")
     private String name;
-    private List<BookEntity> books;
+    private List<BookDTO> books;
 }

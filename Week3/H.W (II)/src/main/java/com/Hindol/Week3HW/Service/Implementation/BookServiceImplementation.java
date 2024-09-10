@@ -7,7 +7,6 @@ import com.Hindol.Week3HW.Exception.ResourceNotFoundException;
 import com.Hindol.Week3HW.Repository.AuthorRepository;
 import com.Hindol.Week3HW.Repository.BookRepository;
 import com.Hindol.Week3HW.Service.BookService;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
@@ -19,11 +18,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class BookServiceImplementation implements BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final ModelMapper modelMapper;
+
+    public BookServiceImplementation(BookRepository bookRepository, AuthorRepository authorRepository, ModelMapper modelMapper) {
+        this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+        this.modelMapper = modelMapper;
+    }
 
     private void checkIfBookExistById(Long id) {
         boolean check = bookRepository.existsById(id);
@@ -55,6 +59,9 @@ public class BookServiceImplementation implements BookService {
         BookEntity book = this.bookRepository.findById(id).orElse(null);
         fieldsToBeUpdated.forEach((field, value) -> {
             Field fieldToBeUpdated = ReflectionUtils.findRequiredField(BookEntity.class, field);
+            if(fieldToBeUpdated.getType().equals(LocalDate.class) && value instanceof String) {
+                value = LocalDate.parse((String) value);
+            }
             fieldToBeUpdated.setAccessible(true);
             ReflectionUtils.setField(fieldToBeUpdated, book, value);
         });
@@ -62,12 +69,9 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public Boolean deleteBookById(Long id) {
+    public void deleteBookById(Long id) {
         checkIfBookExistById(id);
-        BookEntity bookEntity = bookRepository.findById(id).orElse(null);
-        bookEntity.getAuthor().getBooks().remove(bookEntity);
-        authorRepository.save(bookEntity.getAuthor());
-        return true;
+        bookRepository.deleteById(id);
     }
 
     @Override
@@ -78,13 +82,15 @@ public class BookServiceImplementation implements BookService {
 
     @Override
     public List<BookDTO> getBooksByTitle(String title) {
-        List<BookEntity> bookEntities = bookRepository.findByTitle(title);
+        String updatedTitle = '%' + title + '%';
+        List<BookEntity> bookEntities = bookRepository.findByTitleLike(updatedTitle);
         return bookEntities.stream().map(bookEntity -> modelMapper.map(bookEntity, BookDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<BookDTO> getBooksByAuthor(Long authorId) {
-        List<BookEntity> bookEntities = bookRepository.findByAuthor(authorId);
+        AuthorEntity author = authorRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("No Author found with ID : " + authorId));
+        List<BookEntity> bookEntities = author.getBooks();
         return bookEntities.stream().map(bookEntity -> modelMapper.map(bookEntity, BookDTO.class)).collect(Collectors.toList());
     }
 
