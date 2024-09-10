@@ -30,32 +30,32 @@ public class StudentController {
     }
     @GetMapping("/{studentId}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long studentId) {
-        log.debug("STUDENT ID : {}", studentId);
+        log.info("STUDENT ID : {}", studentId);
         return ResponseEntity.ok(studentService.getStudentById(studentId));
     }
     @PutMapping("/{studentId}")
     public ResponseEntity<StudentDTO> updatedStudentById(@PathVariable Long studentId, @RequestBody Map<String, Object> fieldsToBeChanged) {
-        log.debug("STUDENT ID : {}, FIELD TO BE UPDATED : {}", studentId, fieldsToBeChanged.toString());
+        log.info("STUDENT ID : {}, FIELD TO BE UPDATED : {}", studentId, fieldsToBeChanged.toString());
         return ResponseEntity.ok(studentService.updateStudentById(studentId, fieldsToBeChanged));
     }
     @DeleteMapping("/{studentId}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long studentId) {
-        log.debug("STUDENT ID : {}", studentId);
+        log.info("STUDENT ID : {}", studentId);
         return new ResponseEntity<>(Map.of("success", studentService.deleteStudentById(studentId)), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<StudentDTO> createStudent(@RequestBody @Valid StudentDTO studentDTO) {
-        log.debug("STUDENT : {}", studentDTO);
+        log.info("STUDENT : {}", studentDTO);
         return ResponseEntity.ok(studentService.createStudent(studentDTO));
     }
     @GetMapping("/assignedProfessor/{studentId}")
     public ResponseEntity<List<ProfessorDTO>> getAssignedProfessors(@PathVariable Long studentId) {
-        log.debug("STUDENT ID : {}", studentId);
+        log.info("STUDENT ID : {}", studentId);
         return ResponseEntity.ok(studentService.getAssignedProfessors(studentId));
     }
     @GetMapping("/enrolledSubjects/{studentId}")
     public ResponseEntity<List<SubjectDTO>> getEnrolledSubjects(@PathVariable Long studentId) {
-        log.debug("STUDENT ID : {}", studentId);
+        log.info("STUDENT ID : {}", studentId);
         return ResponseEntity.ok(studentService.getEnrolledSubjects(studentId));
     }
 }

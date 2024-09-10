@@ -25,7 +25,7 @@ public class AdmissionRecordController {
 
     @PostMapping("/enrollStudent/{studentId}")
     public ResponseEntity<AdmissionRecordDTO> enrollStudent(@PathVariable Long studentId, @RequestBody @Valid AdmissionRecordDTO admissionRecordDTO) {
-        log.debug("STUDENT ID : {}, ADMISSION RECORD : {}", studentId, admissionRecordDTO);
+        log.info("STUDENT ID : {}, ADMISSION RECORD : {}", studentId, admissionRecordDTO);
         return ResponseEntity.ok(admissionRecordService.enrollStudent(studentId, admissionRecordDTO));
     }
 
@@ -36,13 +36,13 @@ public class AdmissionRecordController {
 
     @GetMapping("/{enrollmentId}")
     public ResponseEntity<AdmissionRecordDTO> getEnrolledStudentRecordById(@PathVariable Long enrollmentId) {
-        log.debug("ENROLLMENT ID : {}", enrollmentId);
+        log.info("ENROLLMENT ID : {}", enrollmentId);
         return ResponseEntity.ok(admissionRecordService.getEnrolledStudentRecordById(enrollmentId));
     }
 
     @DeleteMapping("/{studentId}")
     public ResponseEntity<?> deleteStudentEnrollmentDetails(@PathVariable Long studentId) {
-        log.debug("STUDENT ID : {}", studentId);
+        log.info("STUDENT ID : {}", studentId);
         return new ResponseEntity<>(Map.of("success", admissionRecordService.deleteStudentEnrollmentDetails(studentId)), HttpStatus.OK);
     }
 }
