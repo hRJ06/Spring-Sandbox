@@ -25,7 +25,7 @@ public class UserServiceImplementation implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("No User found with Email " + email));
+        return userRepository.findByEmail(email).orElseThrow(() -> new BadCredentialsException("No User found with Email " + email));
     }
     public UserDTO signUp(SignUpDTO signUpDTO) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(signUpDTO.getEmail());
