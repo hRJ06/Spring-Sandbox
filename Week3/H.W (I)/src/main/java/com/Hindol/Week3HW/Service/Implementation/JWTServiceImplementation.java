@@ -29,4 +29,13 @@ public class JWTServiceImplementation {
                 .signWith(getSecretKey())
                 .compact();
     }
+    public Long getUserIdFromToken(String token) {
+        Claims claims = Jwts
+                .parser().
+                verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return Long.valueOf(claims.getSubject());
+    }
 }

@@ -3,6 +3,7 @@ package com.Hindol.Week3HW.Service.Implementation;
 import com.Hindol.Week3HW.DTO.SignUpDTO;
 import com.Hindol.Week3HW.DTO.UserDTO;
 import com.Hindol.Week3HW.Entity.UserEntity;
+import com.Hindol.Week3HW.Exception.ResourceNotFoundException;
 import com.Hindol.Week3HW.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,5 +35,8 @@ public class UserServiceImplementation implements UserDetailsService {
         userToBeCreated.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
         UserEntity savedUser = userRepository.save(userToBeCreated);
         return modelMapper.map(savedUser, UserDTO.class);
+    }
+    public UserEntity getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No User found with ID " + id));
     }
 }

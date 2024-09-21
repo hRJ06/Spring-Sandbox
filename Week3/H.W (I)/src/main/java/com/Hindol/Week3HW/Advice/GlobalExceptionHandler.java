@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.security.core.AuthenticationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,17 +27,26 @@ public class GlobalExceptionHandler {
         log.error("RESOURCE NOT FOUND EXCEPTION : {}", apiError);
         return buildErrorResponseEntity(apiError);
     }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<APIError> handleInternalServerError(Exception ex) {
-        APIError apiError = APIError.builder().httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).message(ex.getMessage()).build();
-        log.error("INTERNAL SERVER ERROR : {}", apiError);
-        return buildErrorResponseEntity(apiError);
-    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<APIError> handleInputValidationException(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.toList());
         APIError apiError = APIError.builder().httpStatus(HttpStatus.BAD_REQUEST).message("Input Validation error").subErrors(errors).build();
         log.error("INPUT VALIDATION EXCEPTION : {}", apiError);
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<APIError> handleAuthenticationException(AuthenticationException authenticationException) {
+        APIError apiError = APIError.builder().httpStatus(HttpStatus.UNAUTHORIZED).message(authenticationException.getLocalizedMessage()).build();
+        log.error("AUTHENTICATION ERROR : {}", apiError);
+        return new ResponseEntity<APIError>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<APIError> handleInternalServerError(Exception ex) {
+        APIError apiError = APIError.builder().httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).message(ex.getMessage()).build();
+        log.error("INTERNAL SERVER ERROR : {}", apiError);
         return buildErrorResponseEntity(apiError);
     }
 }
