@@ -1,6 +1,7 @@
 package com.Hindol.Week3HW.Configuration;
 
 import com.Hindol.Week3HW.Filter.JWTAuthFilter;
+import com.Hindol.Week3HW.Filter.LoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfiguration {
     private final JWTAuthFilter jwtAuthFilter;
+    private final LoggingFilter loggingFilter;
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -27,6 +29,7 @@ public class WebSecurityConfiguration {
                 )
                 .csrf(AbstractHttpConfigurer::disable) /* sessionConfig -> sessionConfig.disable() */
                 .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
