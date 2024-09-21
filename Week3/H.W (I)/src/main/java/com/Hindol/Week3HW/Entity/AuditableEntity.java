@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class) /* It automatically populates the createdDate, updatedDate, createdBy, updatedBy */
 @Audited /* Hibernate-envers */
 public class AuditableEntity {
     @CreatedDate
