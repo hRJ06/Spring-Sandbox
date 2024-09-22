@@ -14,10 +14,13 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImplementation implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JWTServiceImplementation jwtServiceImplementation;
+    private final SessionServiceImplementation sessionServiceImplementation;
     @Override
     public String generateToken(LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
-        return jwtServiceImplementation.generateToken(userEntity);
+        String token = jwtServiceImplementation.generateToken(userEntity);
+        sessionServiceImplementation.generateNewSession(userEntity, token);
+        return token;
     }
 }

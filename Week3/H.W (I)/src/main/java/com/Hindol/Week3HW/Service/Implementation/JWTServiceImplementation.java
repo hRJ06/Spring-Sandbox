@@ -4,6 +4,7 @@ import com.Hindol.Week3HW.Entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class JWTServiceImplementation {
     @Value("${jwt.secret_key}")
     private String jwt_secret_key;
-
+    private final SessionServiceImplementation sessionServiceImplementation;
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(jwt_secret_key.getBytes(StandardCharsets.UTF_8));
     }
@@ -37,5 +39,9 @@ public class JWTServiceImplementation {
                 .parseSignedClaims(token)
                 .getPayload();
         return Long.valueOf(claims.getSubject());
+    }
+    public boolean validateSession(String token) {
+        sessionServiceImplementation.validateSession(token);
+        return true;
     }
 }

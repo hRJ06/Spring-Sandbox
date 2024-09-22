@@ -2,6 +2,7 @@ package com.Hindol.Week3HW.Filter;
 
 import com.Hindol.Week3HW.Entity.UserEntity;
 import com.Hindol.Week3HW.Service.Implementation.JWTServiceImplementation;
+import com.Hindol.Week3HW.Service.Implementation.SessionServiceImplementation;
 import com.Hindol.Week3HW.Service.Implementation.UserServiceImplementation;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -38,7 +39,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             }
             String token = requestTokenHeader.split("Bearer ")[1];
             Long userId = jwtServiceImplementation.getUserIdFromToken(token);
-            if(userId != null && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
+
+            if(userId != null && Objects.isNull(SecurityContextHolder.getContext().getAuthentication()) && jwtServiceImplementation.validateSession(token))  {
                 UserEntity userEntity = userServiceImplementation.getUserById(userId);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userEntity, null, null);
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
