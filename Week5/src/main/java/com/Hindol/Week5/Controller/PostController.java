@@ -1,30 +1,32 @@
 package com.Hindol.Week5.Controller;
 
 import com.Hindol.Week5.DTO.PostDTO;
-import com.Hindol.Week5.Service.PostService;
+import com.Hindol.Week5.Service.Implementation.PostServiceImplementation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/posts")
+@RequestMapping("/posts")
 @RequiredArgsConstructor
 public class PostController {
-    private final PostService postService;
+    private final PostServiceImplementation postServiceImplementation;
 
     @GetMapping
-    public List<PostDTO> getAllPosts() {
-        return postService.getAllPosts();
+    public List<PostDTO> getAllPosts(HttpServletRequest request) {
+        return postServiceImplementation.getAllPosts();
     }
 
     @GetMapping("/{postId}")
     public PostDTO getPostById(@PathVariable Long postId) {
-        return postService.getPostById(postId);
+        return postServiceImplementation.getPostById(postId);
     }
 
     @PostMapping
     public PostDTO createNewPost(@RequestBody PostDTO inputPost) {
-        return postService.createNewPost(inputPost);
+        return postServiceImplementation.createNewPost(inputPost);
     }
 }

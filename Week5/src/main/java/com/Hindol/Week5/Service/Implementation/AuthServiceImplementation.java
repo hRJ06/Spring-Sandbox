@@ -15,17 +15,22 @@ public class AuthServiceImplementation {
     private final AuthenticationManager authenticationManager;
     private final JWTServiceImplementation jwtServiceImplementation;
     private final UserServiceImplementation userServiceImplementation;
+    private final SessionServiceImplementation sessionServiceImplementation;
 
     public LoginResponseDTO login(LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
         UserEntity user = (UserEntity) authentication.getPrincipal();
         String accessToken = jwtServiceImplementation.generateAccessToken(user);
         String refreshToken = jwtServiceImplementation.generateRefreshToken(user);
+
+        sessionServiceImplementation.generateNewSession(user, refreshToken);
+
         return new LoginResponseDTO(user.getId(), accessToken, refreshToken);
     }
 
     public LoginResponseDTO refreshToken(String refreshToken) {
         Long userId = jwtServiceImplementation.getUserIdFromToken(refreshToken);
+        sessionServiceImplementation.validateSession(refreshToken);
         UserEntity userEntity = userServiceImplementation.getUserById(userId);
         String accessToken = jwtServiceImplementation.generateAccessToken(userEntity);
         return new LoginResponseDTO(userId, accessToken, refreshToken);

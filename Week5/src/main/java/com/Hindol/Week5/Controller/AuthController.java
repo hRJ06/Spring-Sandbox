@@ -26,10 +26,12 @@ import java.util.Arrays;
 public class AuthController {
     @Value("${deploy.env}")
     private String deployEnv;
+
     private final UserServiceImplementation userServiceImplementation;
     private final AuthServiceImplementation authServiceImplementation;
+
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> signUp(@RequestBody SignUpDTO signUpDTO) {
+    public ResponseEntity<UserDTO> signUp(@RequestBody SignUpDTO signUpDTO,HttpServletRequest request) {
         UserDTO userDTO = userServiceImplementation.signUp(signUpDTO);
         return ResponseEntity.ok(userDTO);
     }
@@ -40,6 +42,7 @@ public class AuthController {
         Cookie cookie = new Cookie("refreshToken", loginResponseDTO.getRefreshToken());
         cookie.setHttpOnly(true);
         cookie.setSecure("production".equals(deployEnv));
+        cookie.setPath("/");
         response.addCookie(cookie);
 
         return ResponseEntity.ok(loginResponseDTO);
