@@ -40,4 +40,10 @@ public class UserServiceImplementation implements UserDetailsService {
     public UserEntity getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No User found with ID " + userId));
     }
+    public UserEntity getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+    public UserEntity save(UserEntity user) {
+        return userRepository.save(user);
+    }
 }

@@ -22,7 +22,7 @@ public class JWTServiceImplementation {
         return Keys.hmacShaKeyFor(jwt_secret_key.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(UserEntity userEntity) {
+    public String generateAccessToken(UserEntity userEntity) {
         return Jwts.builder()
                 .subject(userEntity.getId().toString())
                 .claim("email", userEntity.getEmail())
@@ -32,6 +32,15 @@ public class JWTServiceImplementation {
                 .signWith(getSecretKey())
                 .compact();
     }
+    public String generateRefreshToken(UserEntity userEntity) {
+        return Jwts.builder()
+                .subject(userEntity.getId().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30 * 6))
+                .signWith(getSecretKey())
+                .compact();
+    }
+
 
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
