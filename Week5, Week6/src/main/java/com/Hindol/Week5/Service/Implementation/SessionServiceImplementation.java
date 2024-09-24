@@ -35,7 +35,7 @@ public class SessionServiceImplementation {
         sessionRepository.save(sessionEntity);
     }
     public void updateSession(String oldRefreshToken, String newRefreshToken) {
-        SessionEntity oldSession = sessionRepository.findByRefreshToken(newRefreshToken).orElseThrow(() -> new SessionAuthenticationException("No Session found with Refresh Token " + newRefreshToken));
+        SessionEntity oldSession = sessionRepository.findByRefreshToken(oldRefreshToken).orElseThrow(() -> new SessionAuthenticationException("No Session found with Refresh Token " + newRefreshToken));
         oldSession.setLastUsedAt(LocalDateTime.now());
         oldSession.setRefreshToken(newRefreshToken);
         sessionRepository.save(oldSession);
