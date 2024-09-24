@@ -1,5 +1,6 @@
 package com.Hindol.Week5.Configuration;
 
+import com.Hindol.Week5.Entity.Enum.Permission;
 import com.Hindol.Week5.Filter.JWTAuthFilter;
 import com.Hindol.Week5.Handler.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.Hindol.Week5.Entity.Enum.Permission.*;
 import static com.Hindol.Week5.Entity.Enum.Role.ADMIN;
 import static com.Hindol.Week5.Entity.Enum.Role.CREATOR;
 
@@ -31,7 +33,21 @@ public class WebSecurityConfiguration {
                 authorizeHttpRequests(auth -> auth
                         .requestMatchers(publicRoutes).permitAll()
                         .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyRole(ADMIN.name(), CREATOR.name())
+                        .requestMatchers(HttpMethod.POST, "/posts/**")
+                            .hasAnyRole(ADMIN.name(), CREATOR.name())
+
+                        .requestMatchers(HttpMethod.POST, "/posts/**")
+                            .hasAuthority(POST_CREATE.name())
+
+                        .requestMatchers(HttpMethod.GET, "/posts/**")
+                            .hasAuthority(POST_VIEW.name())
+
+                        .requestMatchers(HttpMethod.PUT, "/posts/**")
+                            .hasAuthority(POST_UPDATE.name())
+
+                        .requestMatchers(HttpMethod.DELETE, "/posts/**")
+                            .hasAuthority(POST_DELETE.name())
+
                         /* .requestMatchers("/posts/**").hasAnyRole("ADMIN") */
                         /* .requestMatchers("/posts/**").permitAll() */
                         .anyRequest().authenticated())
