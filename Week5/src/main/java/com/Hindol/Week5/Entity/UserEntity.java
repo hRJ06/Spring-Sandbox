@@ -3,6 +3,7 @@ package com.Hindol.Week5.Entity;
 import com.Hindol.Week5.Entity.Enum.Permission;
 import com.Hindol.Week5.Entity.Enum.Role;
 import com.Hindol.Week5.Util.PermissionMapping;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +35,10 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "author")
+    private Set<PostEntity> posts;
+
     /*
        @ElementCollection(fetch = FetchType.EAGER)
        @Enumerated(EnumType.STRING)
@@ -52,6 +57,7 @@ public class UserEntity implements UserDetails {
         );
         return authorities;
     }
+
 
     @Override
     public String getPassword() {

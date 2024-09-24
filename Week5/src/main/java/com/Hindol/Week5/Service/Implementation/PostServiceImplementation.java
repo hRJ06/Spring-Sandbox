@@ -2,11 +2,13 @@ package com.Hindol.Week5.Service.Implementation;
 
 import com.Hindol.Week5.DTO.PostDTO;
 import com.Hindol.Week5.Entity.PostEntity;
+import com.Hindol.Week5.Entity.UserEntity;
 import com.Hindol.Week5.Exception.ResourceNotFoundException;
 import com.Hindol.Week5.Repository.PostRepository;
 import com.Hindol.Week5.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +31,9 @@ public class PostServiceImplementation implements PostService {
 
     @Override
     public PostDTO createNewPost(PostDTO inputPost) {
+        UserEntity user = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PostEntity postEntity = modelMapper.map(inputPost, PostEntity.class);
+        postEntity.setAuthor(user);
         return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
     }
 
