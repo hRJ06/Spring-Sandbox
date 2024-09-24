@@ -29,10 +29,12 @@ public class AuthServiceImplementation {
     }
 
     public LoginResponseDTO refreshToken(String refreshToken) {
-        Long userId = jwtServiceImplementation.getUserIdFromToken(refreshToken);
         sessionServiceImplementation.validateSession(refreshToken);
+        Long userId = jwtServiceImplementation.getUserIdFromToken(refreshToken);
         UserEntity userEntity = userServiceImplementation.getUserById(userId);
         String accessToken = jwtServiceImplementation.generateAccessToken(userEntity);
-        return new LoginResponseDTO(userId, accessToken, refreshToken);
+        String newRefreshToken = jwtServiceImplementation.generateRefreshToken(userEntity);
+        sessionServiceImplementation.updateSession(refreshToken, newRefreshToken);
+        return new LoginResponseDTO(userId, accessToken, newRefreshToken);
     }
 }

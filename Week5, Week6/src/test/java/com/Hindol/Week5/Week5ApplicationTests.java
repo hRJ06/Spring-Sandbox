@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Set;
+
 @SpringBootTest
 class Week5ApplicationTests {
 
@@ -13,7 +15,7 @@ class Week5ApplicationTests {
 	private JWTServiceImplementation jwtServiceImplementation;
 	@Test
 	void contextLoads() {
-		UserEntity userEntity = new UserEntity(4L, "Hindol Roy", "hindol.roy@gmail.com", "1234");
+		UserEntity userEntity = new UserEntity(4L, "Hindol Roy", "hindol.roy@gmail.com", "1234", Set.of(), Set.of());
 		String token = jwtServiceImplementation.generateAccessToken(userEntity);
 		System.out.println(token);
 		Long id = jwtServiceImplementation.getUserIdFromToken(token);

@@ -38,7 +38,6 @@ public class UserEntity implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "author")
     private Set<PostEntity> posts;
-
     /*
        @ElementCollection(fetch = FetchType.EAGER)
        @Enumerated(EnumType.STRING)
