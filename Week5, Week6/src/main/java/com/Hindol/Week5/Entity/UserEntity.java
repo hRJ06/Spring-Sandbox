@@ -2,6 +2,7 @@ package com.Hindol.Week5.Entity;
 
 import com.Hindol.Week5.Entity.Enum.Permission;
 import com.Hindol.Week5.Entity.Enum.Role;
+import com.Hindol.Week5.Entity.Enum.SubscriptionPlan;
 import com.Hindol.Week5.Util.PermissionMapping;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -38,6 +39,10 @@ public class UserEntity implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "author")
     private Set<PostEntity> posts;
+
+    @Enumerated(EnumType.STRING)
+    private SubscriptionPlan subscriptionPlan;
+
     /*
        @ElementCollection(fetch = FetchType.EAGER)
        @Enumerated(EnumType.STRING)

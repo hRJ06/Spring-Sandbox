@@ -1,5 +1,6 @@
 package com.Hindol.Week5.Service.Implementation;
 
+import com.Hindol.Week5.Entity.Enum.SubscriptionPlan;
 import com.Hindol.Week5.Entity.SessionEntity;
 import com.Hindol.Week5.Entity.UserEntity;
 import com.Hindol.Week5.Repository.SessionRepository;
@@ -11,14 +12,30 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.Hindol.Week5.Entity.Enum.SubscriptionPlan.*;
+
 @Service
 @RequiredArgsConstructor
 public class SessionServiceImplementation {
     private final SessionRepository sessionRepository;
-    private final int SESSION_LIMIT = 1;
+    /* private final int SESSION_LIMIT = 1 */;
     public void generateNewSession(UserEntity userEntity, String refreshToken) {
         List<SessionEntity> userSessions = sessionRepository.findByUserEntity(userEntity);
-        if(!userSessions.isEmpty()) {
+        SubscriptionPlan subscriptionPlan = userEntity.getSubscriptionPlan();
+
+        int sessionLimit = 0;
+
+        if(subscriptionPlan.equals(FREE)) {
+            sessionLimit = 1;
+        }
+        else if(subscriptionPlan.equals(BASIC)) {
+            sessionLimit = 2;
+        }
+        else if(subscriptionPlan.equals(PREMIUM)) {
+            sessionLimit = 3;
+        }
+
+        if(userSessions.size() >= sessionLimit) {
             userSessions.sort(Comparator.comparing(SessionEntity::getLastUsedAt));
             SessionEntity leastRecentlyUsedSession = userSessions.get(0);
             sessionRepository.delete(leastRecentlyUsedSession);

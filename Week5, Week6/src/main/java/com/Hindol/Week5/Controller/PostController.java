@@ -18,7 +18,7 @@ public class PostController {
     private final PostServiceImplementation postServiceImplementation;
 
     @GetMapping
-    @Secured({"ROLE_ADMIN", "ROLE_CREATOR"})
+    /* @Secured({"ROLE_ADMIN", "ROLE_CREATOR"}) */
     public List<PostDTO> getAllPosts(HttpServletRequest request) {
         return postServiceImplementation.getAllPosts();
     }
@@ -31,7 +31,26 @@ public class PostController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('CREATOR', 'ADMIN')")
     public PostDTO createNewPost(@RequestBody PostDTO inputPost) {
         return postServiceImplementation.createNewPost(inputPost);
+    }
+
+    @GetMapping("/free-content")
+    @PreAuthorize("@subscriptionServiceImplementation.hasAccessBasedOnPlan(principal, 'FREE')")
+    public String freeContent() {
+        return "This is FREE content and is available to all users.";
+    }
+
+    @GetMapping("/basic-content")
+    @PreAuthorize("@subscriptionServiceImplementation.hasAccessBasedOnPlan(principal, 'BASIC')")
+    public String basicContent() {
+        return "This is BASIC content and is available to BASIC and PREMIUM users.";
+    }
+
+    @GetMapping("/premium-content")
+    @PreAuthorize("@subscriptionServiceImplementation.hasAccessBasedOnPlan(principal, 'PREMIUM')")
+    public String premiumContent() {
+        return "This is PREMIUM content and is available to only PREMIUM users.";
     }
 }

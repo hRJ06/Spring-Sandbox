@@ -34,21 +34,26 @@ public class WebSecurityConfiguration {
         httpSecurity.
                 authorizeHttpRequests(auth -> auth
                         .requestMatchers(publicRoutes).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/posts/**")
-                            .hasAnyRole(ADMIN.name(), CREATOR.name())
+                        .requestMatchers("/posts/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/posts/**")
-                            .hasAuthority(POST_CREATE.name())
+                        /*
+                            .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/posts/**")
+                                .hasAnyRole(ADMIN.name(), CREATOR.name())
 
-                        .requestMatchers(HttpMethod.GET, "/posts/**")
-                            .hasAuthority(POST_VIEW.name())
+                            .requestMatchers(HttpMethod.POST, "/posts/**")
+                                .hasAuthority(POST_CREATE.name())
 
-                        .requestMatchers(HttpMethod.PUT, "/posts/**")
-                            .hasAuthority(POST_UPDATE.name())
+                            .requestMatchers(HttpMethod.GET, "/posts/**")
+                                .hasAuthority(POST_VIEW.name())
 
-                        .requestMatchers(HttpMethod.DELETE, "/posts/**")
-                            .hasAuthority(POST_DELETE.name())
+                            .requestMatchers(HttpMethod.PUT, "/posts/**")
+                                .hasAuthority(POST_UPDATE.name())
+
+                            .requestMatchers(HttpMethod.DELETE, "/posts/**")
+                                .hasAuthority(POST_DELETE.name())
+
+                         */
 
                         /* .requestMatchers("/posts/**").hasAnyRole("ADMIN") */
                         /* .requestMatchers("/posts/**").permitAll() */
