@@ -63,7 +63,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
     @Override
     public void deleteEmployee(Long id) {
         log.info("Deleting Employee with ID : {}", id);
-        boolean exists =employeeRepository.existsById(id);
+        boolean exists = employeeRepository.existsById(id);
         if(!exists) {
             log.error("Employee not found with ID : {}", id);
             throw new ResourceNotFoundException("No Employee found with ID " + id);
