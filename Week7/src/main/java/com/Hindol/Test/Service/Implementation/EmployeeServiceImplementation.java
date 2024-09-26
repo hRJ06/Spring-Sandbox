@@ -23,7 +23,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
         log.info("Fetching Employee with ID : {}", id);
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No Employee found with ID " + id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No Employee found with ID : " + id));
         log.info("Successfully fetched Employee with ID : {}", id);
         return modelMapper.map(employee, EmployeeDTO.class);
     }
@@ -71,4 +71,5 @@ public class EmployeeServiceImplementation implements EmployeeService {
         employeeRepository.deleteById(id);
         log.info("Successfully deleted Employee with ID : {}", id);
     }
+
 }
