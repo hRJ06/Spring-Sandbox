@@ -48,8 +48,8 @@ class AuthorControllerTestIT {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.data.[0].id").isEqualTo(savedAuthor.getId())
-                .jsonPath("$.data.[0].name").isEqualTo(savedAuthor.getName());
+                .jsonPath("$.data[0].id").isEqualTo(savedAuthor.getId())
+                .jsonPath("$.data[0].name").isEqualTo(savedAuthor.getName());
     }
 
     @Test
@@ -60,8 +60,8 @@ class AuthorControllerTestIT {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.data.[0].id").isEqualTo(savedAuthor.getId())
-                .jsonPath("$.data.[0].name").isEqualTo(savedAuthor.getName());
+                .jsonPath("$.data[0].id").isEqualTo(savedAuthor.getId())
+                .jsonPath("$.data[0].name").isEqualTo(savedAuthor.getName());
     }
 
     @Test

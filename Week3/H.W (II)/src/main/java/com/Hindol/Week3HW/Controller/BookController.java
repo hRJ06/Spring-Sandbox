@@ -40,10 +40,10 @@ public class BookController {
         return new ResponseEntity<BookDTO>(bookService.createBook(bookDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{authorId}")
-    public ResponseEntity<BookDTO> updateBookById(@PathVariable Long authorId, @RequestBody Map<String, Object> fieldsTobeUpdated) {
-        log.info("AUTHOR ID : {}, FIELD TO BE UPDATED : {}", authorId, fieldsTobeUpdated);
-        return ResponseEntity.ok(bookService.updatedBookById(authorId, fieldsTobeUpdated));
+    @PutMapping("/{bookId}")
+    public ResponseEntity<BookDTO> updateBookById(@PathVariable Long bookId, @RequestBody Map<String, Object> fieldsTobeUpdated) {
+        log.info("BOOK ID : {}, FIELD TO BE UPDATED : {}", bookId, fieldsTobeUpdated);
+        return ResponseEntity.ok(bookService.updatedBookById(bookId, fieldsTobeUpdated));
     }
 
     @DeleteMapping("/{bookId}")

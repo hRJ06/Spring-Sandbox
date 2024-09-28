@@ -24,6 +24,6 @@ public class BookDTO {
     private String description;
     @JsonIgnore
     private AuthorDTO author;
-    @PastOrPresent
+    @PastOrPresent(message = "Book publish date should be Past or Present")
     private LocalDate publishDate;
 }
