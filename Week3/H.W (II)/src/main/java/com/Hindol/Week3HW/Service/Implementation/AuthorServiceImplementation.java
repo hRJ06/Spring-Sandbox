@@ -74,12 +74,11 @@ public class AuthorServiceImplementation implements AuthorService {
     }
 
     @Override
-    public Boolean deleteAuthorById(Long authorId) {
+    public void deleteAuthorById(Long authorId) {
         log.info("Deleting Author By ID : {}", authorId);
         checkIfAuthorExistsById(authorId);
         authorRepository.deleteById(authorId);
         log.info("Deleted Author By ID : {}", authorId);
-        return true;
     }
 
     @Override

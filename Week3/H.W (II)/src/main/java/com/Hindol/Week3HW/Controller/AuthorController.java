@@ -35,9 +35,10 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{authorId}")
-    public ResponseEntity<Boolean> deleteAuthorById(@PathVariable Long authorId) {
+    public ResponseEntity<?> deleteAuthorById(@PathVariable Long authorId) {
         log.info("AUTHOR ID : {}", authorId);
-        return ResponseEntity.ok(authorService.deleteAuthorById(authorId));
+        authorService.deleteAuthorById(authorId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping

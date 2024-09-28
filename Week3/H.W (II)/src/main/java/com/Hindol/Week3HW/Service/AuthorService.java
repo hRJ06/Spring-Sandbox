@@ -10,6 +10,6 @@ public interface AuthorService {
     public AuthorDTO getAuthorById(Long authorId);
     public AuthorDTO createAuthor(AuthorDTO authorDTO);
     public AuthorDTO updateAuthorById(Long authorId, Map<String, Object> fieldsToBeChanged);
-    public Boolean deleteAuthorById(Long authorId);
+    public void deleteAuthorById(Long authorId);
     public List<AuthorDTO> getAuthorsByName(String authorName);
 }
