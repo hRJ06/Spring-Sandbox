@@ -1,5 +1,6 @@
 package com.Hindol.Week3HW.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -17,5 +18,6 @@ public class AuthorDTO {
     @NotNull
     @Size(min = 3, max = 100, message = "The number of characters in the name of Author should be in the range [3, 100]")
     private String name;
+    @JsonIgnore
     private List<BookDTO> books;
 }

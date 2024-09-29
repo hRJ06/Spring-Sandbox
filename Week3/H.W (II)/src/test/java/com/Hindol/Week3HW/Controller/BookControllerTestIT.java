@@ -1,6 +1,5 @@
 package com.Hindol.Week3HW.Controller;
 
-import com.Hindol.Week3HW.DTO.AuthorDTO;
 import com.Hindol.Week3HW.DTO.BookDTO;
 import com.Hindol.Week3HW.Entity.AuthorEntity;
 import com.Hindol.Week3HW.Entity.BookEntity;
@@ -19,8 +18,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @AutoConfigureWebTestClient(timeout = "100000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestContainerConfiguration.class)
@@ -36,18 +33,15 @@ class BookControllerTestIT {
     private BookRepository bookRepository;
 
     private AuthorEntity mockAuthor;
-    private AuthorDTO mockAuthorDTO;
-    private BookEntity mockBook;
+    private BookEntity mockBook, mockBook_2;
     private BookDTO mockBookDTO;
     private BookDTO invalidMockBookDTO;
 
     @BeforeEach
     void setUp() {
+        bookRepository.deleteAll();
+        authorRepository.deleteAll();
         mockAuthor = AuthorEntity.builder()
-                .id(1L)
-                .name("Hindol Roy")
-                .build();
-        mockAuthorDTO = AuthorDTO.builder()
                 .id(1L)
                 .name("Hindol Roy")
                 .build();
@@ -55,6 +49,13 @@ class BookControllerTestIT {
                 .id(1L)
                 .title("Charlie Chaplin")
                 .description("Classics of Charlie Chaplin")
+                .publishDate(LocalDate.of(2023, 2, 2))
+                .build();
+        mockBook_2 = BookEntity.builder()
+                .id(2L)
+                .title("Eric Cantona")
+                .description("Life of Eric Cantona")
+                .publishDate(LocalDate.of(2024, 8, 2))
                 .build();
         mockBookDTO = BookDTO.builder()
                 .id(1L)
@@ -63,13 +64,13 @@ class BookControllerTestIT {
                 .publishDate(LocalDate.of(2023, 2, 2))
                 .build();
         invalidMockBookDTO = BookDTO.builder()
-                .id(1L)
+                .id(2L)
                 .title("Charlie Chaplin")
                 .description("Classics of CC")
                 .publishDate(LocalDate.of(2024, 10, 2))
                 .build();
-        bookRepository.deleteAll();
         authorRepository.deleteAll();
+        bookRepository.deleteAll();
     }
 
     @Test
@@ -190,4 +191,117 @@ class BookControllerTestIT {
                 .expectBody()
                 .jsonPath("$.apiError.message").isEqualTo("No Book found with ID : 1");
     }
+
+    @Test
+    void testGetBooksPublishedAfterData_whenValidBook_thenReturnListOfBookDTOs() {
+        bookRepository.save(mockBook);
+        BookEntity savedBook = bookRepository.save(mockBook_2);
+        webTestClient.get()
+                .uri("/book/getAfterDate/{date}",LocalDate.of(2024, 5, 30))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.data[0].id").isEqualTo(savedBook.getId())
+                .jsonPath("$.data[0].title").isEqualTo(savedBook.getTitle());
+    }
+
+    @Test
+    void testGetBooksByTitle_whenValidTitle_thenReturnListOfBookDTOs() {
+        bookRepository.save(mockBook);
+        BookEntity savedBook = bookRepository.save(mockBook_2);
+        webTestClient.get()
+                .uri("/book/title/{title}", "ric")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.data[0].id").isEqualTo(savedBook.getId())
+                .jsonPath("$.data[0].title").isEqualTo(savedBook.getTitle())
+                .jsonPath("$.data[0].description").isEqualTo(savedBook.getDescription());
+    }
+
+    @Test
+    void testGetBooksByTitle_whenInvalidTitle_thenReturnEmptyListOfBookDTOs() {
+        webTestClient.get()
+                .uri("/book/title/{title}", "ric")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.data").isArray()
+                .jsonPath("$.data").isEmpty();
+    }
+
+    @Test
+    void testGetBooksByAuthor_whenValidAuthor_thenReturnListOfBookDTOs() {
+        AuthorEntity savedAuthor = authorRepository.save(mockAuthor);
+        mockBook.setAuthor(savedAuthor);
+        BookEntity savedBook = bookRepository.save(mockBook);
+        webTestClient.get()
+                .uri("/book/author/{id}", savedAuthor.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.data[0].title").isEqualTo(savedBook.getTitle())
+                .jsonPath("$.data[0].description").isEqualTo(savedBook.getDescription());
+    }
+
+    @Test
+    void testGetBooksByAuthor_whenInvalidAuthor_thenThrowException() {
+        AuthorEntity savedAuthor = authorRepository.save(mockAuthor);
+        mockBook.setAuthor(savedAuthor);
+        bookRepository.save(mockBook);
+        webTestClient.get()
+                .uri("/book/author/{id}",10)
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("$.apiError.message").isEqualTo("No Author found with ID : 10");
+    }
+
+    @Test
+    void testAssignBookToAuthor_whenValidBookAndAuthor_thenReturnListOfBook() {
+        BookEntity savedBook = bookRepository.save(mockBook);
+        AuthorEntity savedAuthor = authorRepository.save(mockAuthor);
+        webTestClient.put()
+                .uri("/book/{id}/author/{id}", savedBook.getId(), savedAuthor.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.data.id").isEqualTo(savedBook.getId())
+                .jsonPath("$.data.title").isEqualTo(savedBook.getTitle())
+                .jsonPath("$.data.author.id").isEqualTo(savedAuthor.getId())
+                .jsonPath("$.data.author.name").isEqualTo(savedAuthor.getName());
+
+        webTestClient.get()
+                .uri("/book/author/{id}", savedAuthor.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.data[0].id").isEqualTo(savedBook.getId())
+                .jsonPath("$.data[0].title").isEqualTo(savedBook.getTitle())
+                .jsonPath("$.data[0].description").isEqualTo(savedBook.getDescription());
+    }
+
+    @Test
+    void testAssignBookToAuthor_whenInvalidBook_thenThrowException() {
+        AuthorEntity savedAuthor = authorRepository.save(mockAuthor);
+        webTestClient.put()
+                .uri("/book/{id}/author/{id}", 10, savedAuthor.getId())
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("$.apiError.message").isEqualTo("No Book found with ID : 10");
+    }
+
+    @Test
+    void testAssignBookToAuthor_whenInvalidAuthor_thenThrowException() {
+        BookEntity savedBook = bookRepository.save(mockBook);
+        authorRepository.save(mockAuthor);
+        webTestClient.put()
+                .uri("/book/{id}/author/{id}", savedBook.getId(), 10)
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("$.apiError.message").isEqualTo("Author not found with ID : 10");
+    }
+
 }

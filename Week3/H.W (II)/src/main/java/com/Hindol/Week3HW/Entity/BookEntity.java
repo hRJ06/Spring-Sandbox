@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Audited
 public class BookEntity extends AuditableEntity {
     @Id

@@ -71,7 +71,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBooksByAuthor(authorId));
     }
 
-    @GetMapping("{bookId}/author/{authorId}")
+    @PutMapping("{bookId}/author/{authorId}")
     public ResponseEntity<BookDTO> assignBookToAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
         log.info("BOOK ID : {}, AUTHOR ID : {}", bookId, authorId);
         return ResponseEntity.ok(bookService.assignAuthorToBook(bookId, authorId));
