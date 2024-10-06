@@ -15,12 +15,13 @@ class ShipmentServiceImplementationTest {
 
     @Test
     void aopTestOrderPackage() {
-        shipmentServiceImplementation.orderPackage(1L);
+        String orderString = shipmentServiceImplementation.orderPackage(-1L);
+        log.info(orderString);
     }
 
     @Test
     void aopTestTrackPackage() {
-        shipmentServiceImplementation.trackPackage(1L);
+        shipmentServiceImplementation.trackPackage(4L);
     }
 
 }
