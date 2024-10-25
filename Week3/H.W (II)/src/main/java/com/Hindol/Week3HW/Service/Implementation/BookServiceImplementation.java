@@ -9,6 +9,9 @@ import com.Hindol.Week3HW.Repository.BookRepository;
 import com.Hindol.Week3HW.Service.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,7 @@ public class BookServiceImplementation implements BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final ModelMapper modelMapper;
+    private final String CACHE_NAME = "employees";
 
     public BookServiceImplementation(BookRepository bookRepository, AuthorRepository authorRepository, ModelMapper modelMapper) {
         this.bookRepository = bookRepository;
@@ -37,6 +41,7 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
+    @Cacheable(cacheNames = CACHE_NAME, key = "#id")
     public BookDTO getBookById(Long id) {
         log.info("Fetching Book by ID : {}", id);
         checkIfBookExistById(id);
@@ -54,15 +59,17 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
+    @CachePut(cacheNames = CACHE_NAME, key = "#result.id")
     public BookDTO createBook(BookDTO bookDTO) {
         log.info("Creating Book");
         BookEntity book = modelMapper.map(bookDTO, BookEntity.class);
         BookEntity createdBook = bookRepository.save(book);
-        log.info("Created Book");
+        log.info("Created Book with ID : {}", createdBook.getId());
         return modelMapper.map(createdBook, BookDTO.class);
     }
 
     @Override
+    @CachePut(cacheNames = CACHE_NAME, key = "#result.id")
     public BookDTO updatedBookById(Long id, Map<String, Object> fieldsToBeUpdated) {
         log.info("Fetching Book with ID : {}", id);
         checkIfBookExistById(id);
@@ -81,6 +88,7 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
+    @CacheEvict(cacheNames = CACHE_NAME, key = "#id")
     public void deleteBookById(Long id) {
         log.info("Deleting Book by ID : {}", id);
         checkIfBookExistById(id);
