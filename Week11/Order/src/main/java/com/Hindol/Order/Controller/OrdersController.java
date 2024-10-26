@@ -18,6 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrdersController {
     private final OrdersService ordersService;
+
+    @GetMapping("/hello")
+    public String helloOrder() {
+        return "Hello from Order";
+    }
     @GetMapping
     public ResponseEntity<List<OrderRequestDTO>> getAllOrders() {
         log.info("Fetching all orders via controller");

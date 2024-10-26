@@ -8,12 +8,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Order" />
+        <module name="Discovery" />
         <module name="Inventory" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Discovery" options="-parameters" />
       <module name="Inventory" options="-parameters" />
       <module name="Order" options="-parameters" />
     </option>
