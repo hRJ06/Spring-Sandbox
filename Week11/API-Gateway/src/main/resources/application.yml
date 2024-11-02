@@ -14,6 +14,7 @@ spring:
           filters:
             - StripPrefix=2
 #            - RedirectTo=302, https://app.codingshuttle.com/
+            - name: LoggingOrdersFilter
         - id: Inventory-Service
           uri: lb://INVENTORY-SERVICE
           predicates:
