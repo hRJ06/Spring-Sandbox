@@ -5,10 +5,7 @@ import com.Hindol.Order.Order.OrdersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +32,11 @@ public class OrdersController {
         log.info("Fetching order with ID : {} via controller", id);
         OrderRequestDTO order = ordersService.getOrderById(id);
         return ResponseEntity.ok(order);
+    }
+
+    @PostMapping("/create-order")
+    public ResponseEntity<OrderRequestDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        OrderRequestDTO orderRequestDTO1 = ordersService.createOrder(orderRequestDTO);
+        return ResponseEntity.ok(orderRequestDTO1);
     }
 }
