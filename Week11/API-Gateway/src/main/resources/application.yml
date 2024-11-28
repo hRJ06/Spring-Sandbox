@@ -1,3 +1,6 @@
+jwt:
+  secret_key: P9bRq8c3ZjTNz7XLM5vJHyWcS4dGQ5Ef
+
 spring:
   application:
     name: api-gateway
@@ -15,6 +18,10 @@ spring:
             - StripPrefix=2
 #            - RedirectTo=302, https://app.codingshuttle.com/
             - name: LoggingOrdersFilter
+            - name: Authentication
+              args:
+                isEnabled: false
+#                   No need to explicitly write full name when GatewayFilterFactory is a suffix
         - id: Inventory-Service
           uri: lb://INVENTORY-SERVICE
           predicates:
@@ -22,6 +29,7 @@ spring:
           filters:
             - StripPrefix=2
             - AddRequestHeader=X-Custom-Header, Hindol
+            - name: Authentication
 
 eureka:
   client:
