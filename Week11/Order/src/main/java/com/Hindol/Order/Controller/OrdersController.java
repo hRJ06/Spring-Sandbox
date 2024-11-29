@@ -5,6 +5,7 @@ import com.Hindol.Order.Order.OrdersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/core")
 @RequiredArgsConstructor
+@RefreshScope
 public class OrdersController {
     private final OrdersService ordersService;
     @Value("${my.variable}")
