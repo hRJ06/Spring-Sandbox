@@ -22,9 +22,11 @@ public class SchedulingApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		/* Dynamic Configuration */
-		taskScheduler.schedule(() -> {
-			log.info("Running after 2 sec");
-		}, Instant.ofEpochSecond(2));
+		/*
+			taskScheduler.schedule(() -> {
+				log.info("Running after 2 sec");
+			}, Instant.ofEpochSecond(2));
+		 */
 		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(4,
 				6, 2, TimeUnit.SECONDS,
 				new ArrayBlockingQueue<>(10),
