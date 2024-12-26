@@ -1,17 +1,28 @@
 package com.Hindol.Scheduling;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.time.Instant;
 import java.util.concurrent.*;
 
 @SpringBootApplication
 @Slf4j
+@EnableScheduling
 public class SchedulingApplication implements CommandLineRunner {
+	@Autowired
+	private TaskScheduler taskScheduler;
 	@Override
 	public void run(String... args) throws Exception {
+		/* Dynamic Configuration */
+		taskScheduler.schedule(() -> {
+			log.info("Running after 2 sec");
+		}, Instant.ofEpochSecond(2));
 		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(4,
 				6, 2, TimeUnit.SECONDS,
 				new ArrayBlockingQueue<>(10),
@@ -35,15 +46,17 @@ public class SchedulingApplication implements CommandLineRunner {
 				return new Thread(r, "Thread " + System.nanoTime());
 			}
 		});
-		scheduledThreadPoolExecutor.schedule(new LongRunningTask("Schedule Task"), 4, TimeUnit.SECONDS);
-		log.info("Starting Main Thread - {}", Thread.currentThread().getName());
+		/*
+			scheduledThreadPoolExecutor.schedule(new LongRunningTask("Schedule Task"), 4, TimeUnit.SECONDS);
+			log.info("Starting Main Thread - {}", Thread.currentThread().getName());
+		*/
 		/*
 			for(int i = 0; i<20; i++) {
 				threadPoolExecutor.submit(new LongRunningTask(i + ""));
 				Thread.sleep(1000);
 			}
 		*/
-		log.info("Ending Main Thread - {}", Thread.currentThread().getName());
+		/* log.info("Ending Main Thread - {}", Thread.currentThread().getName()); */
 	}
 
 	public static void main(String[] args) {
