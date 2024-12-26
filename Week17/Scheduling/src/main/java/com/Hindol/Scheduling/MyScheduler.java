@@ -1,6 +1,7 @@
 package com.Hindol.Scheduling;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +11,9 @@ public class MyScheduler {
     /* Not concurrent */
     /* @Scheduled(fixedRate = 1000) */
     /* @Scheduled(fixedDelay = 200, initialDelay = 10000) */
-    /* @Scheduled(fixedRate = 200) */
-    @Scheduled(cron = "*/5 * * * * *")
+    // @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(fixedRate = 200)
+    @Async("jobExecutor") /* Has no limit on thread pool by default */
     void logMe() {
         log.info("Scheduler 1 started - {}", Thread.currentThread().getName());
         try {
