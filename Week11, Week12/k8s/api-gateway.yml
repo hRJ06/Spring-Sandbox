@@ -1,32 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: zipkin
+  name: api-gateway
 spec:
   selector:
     matchLabels:
-      app: zipkin
+      app: api-gateway
   template:
     metadata:
       labels:
-        app: zipkin
+        app: api-gateway
     spec:
       containers:
-      - name: zipkin
-        image: openzipkin/zipkin
+      - name: api-gateway
+        image: hrj06/ecommerce-api-gateway
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: k8s
         resources:
           limits:
-            memory: "400Mi"
-            cpu: "100m"
+            memory: "500Mi"
+            cpu: "200m"
           requests:
-            memory: "200Mi"
-            cpu: "50m"
+            memory: "100Mi"
+            cpu: "100m"
         ports:
-        - containerPort: 9411
+        - containerPort: 8080
         readinessProbe:
           httpGet:
             path: /actuator/health
-            port: 9411
+            port: 8080
           initialDelaySeconds: 300
           periodSeconds: 20
           timeoutSeconds: 20
@@ -35,10 +38,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: zipkin
+  name: api-gateway
 spec:
+  type: LoadBalancer
   selector:
-    app: zipkin
+    app: api-gateway
   ports:
-  - port: 9411
-    targetPort: 9411
+  - port: 80
+    targetPort: 8080

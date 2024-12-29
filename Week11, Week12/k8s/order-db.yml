@@ -20,11 +20,16 @@ spec:
           limits:
             memory: "200Mi"
             cpu: "200m"
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
         env:
           - name: POSTGRES_USER
             value: postgres
           - name: POSTGRES_PASSWORD
             value: rootMyPG
+          - name: POSTGRES_DB
+            value: week11-order-service
           - name: PGDATA
             value: /var/lib/postgresql/data/pgdata
         ports:
