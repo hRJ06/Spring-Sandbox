@@ -24,14 +24,30 @@ spec:
         env:
           - name: SPRING_PROFILES_ACTIVE
             value: k8s
+
           - name: DB_USER
-            value: postgres
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: INVENTORY_DB_USER
+
           - name: DB_PASSWORD
-            value: rootMyPG
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: INVENTORY_DB_PASSWORD
+
           - name: DB_SERVICE
-            value: inventory-db-service
+            valueFrom:
+              configMapKeyRef:
+                name: my-config
+                key: INVENTORY_DB_SERVICE
+
           - name: DB_NAME
-            value: week11-inventory-service
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: INVENTORY_DB_NAME
         ports:
         - containerPort: 9010
 

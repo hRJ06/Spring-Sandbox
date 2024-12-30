@@ -25,13 +25,28 @@ spec:
             cpu: "100m"
         env:
           - name: POSTGRES_USER
-            value: postgres
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: ORDER_DB_USER
+
           - name: POSTGRES_PASSWORD
-            value: rootMyPG
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: ORDER_DB_PASSWORD
+
           - name: POSTGRES_DB
-            value: week11-order-service
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: ORDER_DB_NAME
+
           - name: PGDATA
-            value: /var/lib/postgresql/data/pgdata
+            valueFrom:
+              configMapKeyRef:
+                name: my-config
+                key: PG_DATA
         ports:
         - containerPort: 5432
           name: postgres
