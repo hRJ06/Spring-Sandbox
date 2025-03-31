@@ -1,16 +1,13 @@
 package com.Hindol.Reactive_Programming.Controller;
 
+import com.Hindol.Reactive_Programming.DTO.BookDTO;
 import com.Hindol.Reactive_Programming.Entity.Book;
 import com.Hindol.Reactive_Programming.Service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/book")
@@ -22,5 +19,10 @@ public class BookController {
     @GetMapping("")
     public Flux<Book> getAllBooks() {
         return bookService.getAllBooks();
+    }
+
+    @PostMapping("/{authorId}")
+    public Mono<BookDTO> createBook(@RequestBody BookDTO bookDTO, @PathVariable("authorId") Long authorId) {
+        return bookService.createBook(bookDTO, authorId);
     }
 }

@@ -1,0 +1,39 @@
+package com.Hindol.Reactive_Programming.Service.Implementation;
+
+import com.Hindol.Reactive_Programming.DTO.BookDTO;
+import com.Hindol.Reactive_Programming.Entity.Book;
+import com.Hindol.Reactive_Programming.Mapper.BookMapper;
+import com.Hindol.Reactive_Programming.Repository.BookRepository;
+import com.Hindol.Reactive_Programming.Service.BookService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class BookServiceImplementation implements BookService {
+
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
+
+    @Override
+    public Flux<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    @Override
+    public Mono<BookDTO> createBook(BookDTO bookDTO, Long authorId) {
+        return Mono
+                .just(bookMapper.dtoToEntity(bookDTO))
+                .doOnNext(book -> book.setAuthorId(authorId))
+                .flatMap(bookRepository::save)
+                .map(bookMapper::entityToDto)
+                .onErrorResume(e -> {
+                    log.error("Error occurred while saving book : {}", e.getMessage());
+                    return Mono.empty();
+                });
+    }
+}
