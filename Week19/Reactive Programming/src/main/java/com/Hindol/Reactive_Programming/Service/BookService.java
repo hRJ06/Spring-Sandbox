@@ -8,4 +8,6 @@ import reactor.core.publisher.Mono;
 public interface BookService {
    Flux<Book> getAllBooks();
    Mono<BookDTO> createBook(BookDTO bookDTO, Long authorId);
+   Mono<BookDTO> getBook(Long bookId);
+   Mono<Void> deleteBook(Long bookId);
 }

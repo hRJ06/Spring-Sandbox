@@ -2,6 +2,7 @@ package com.Hindol.Reactive_Programming.Service.Implementation;
 
 import com.Hindol.Reactive_Programming.DTO.BookDTO;
 import com.Hindol.Reactive_Programming.Entity.Book;
+import com.Hindol.Reactive_Programming.Exception.ResourceNotFoundException;
 import com.Hindol.Reactive_Programming.Mapper.BookMapper;
 import com.Hindol.Reactive_Programming.Repository.BookRepository;
 import com.Hindol.Reactive_Programming.Service.BookService;
@@ -35,5 +36,19 @@ public class BookServiceImplementation implements BookService {
                     log.error("Error occurred while saving book : {}", e.getMessage());
                     return Mono.empty();
                 });
+    }
+
+    @Override
+    public Mono<BookDTO> getBook(Long bookId) {
+        return bookRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Book", "ID", String.valueOf(bookId))))
+                .map(bookMapper::entityToDto);
+    }
+
+    @Override
+    public Mono<Void> deleteBook(Long bookId) {
+        return bookRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Book", "ID", String.valueOf(bookId))))
+                .flatMap(bookRepository::delete);
     }
 }

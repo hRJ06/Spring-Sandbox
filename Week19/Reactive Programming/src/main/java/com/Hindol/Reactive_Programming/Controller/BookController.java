@@ -4,6 +4,7 @@ import com.Hindol.Reactive_Programming.DTO.BookDTO;
 import com.Hindol.Reactive_Programming.Entity.Book;
 import com.Hindol.Reactive_Programming.Service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,5 +25,15 @@ public class BookController {
     @PostMapping("/{authorId}")
     public Mono<BookDTO> createBook(@RequestBody BookDTO bookDTO, @PathVariable("authorId") Long authorId) {
         return bookService.createBook(bookDTO, authorId);
+    }
+
+    @GetMapping("/{bookId}")
+    public Mono<BookDTO> getBookById(@PathVariable("bookId") Long bookId) {
+        return bookService.getBook(bookId);
+    }
+
+    @DeleteMapping("/{bookId}")
+    public Mono<ResponseEntity<Void>> deleteBookById(@PathVariable("bookId") Long bookId) {
+        return bookService.deleteBook(bookId).then(Mono.just(ResponseEntity.noContent().build()));
     }
 }
