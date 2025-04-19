@@ -16,6 +16,7 @@ class HealthControllerTest {
     @Autowired
     WebTestClient webTestClient;
 
+    private static String HEALTH_ENDPOINT = "/api/v1/health/";
     @Test
     void checkHealth() {
 
@@ -49,7 +50,7 @@ class HealthControllerTest {
         /* APPROACH - 3 */
         webTestClient
                 .get()
-                .uri("/api/v1/health/ping")
+                .uri(HEALTH_ENDPOINT + "/ping")
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful()
@@ -64,7 +65,7 @@ class HealthControllerTest {
     void checkHealthStream() {
         var mono = webTestClient
                 .get()
-                .uri("/api/v1/health/ping-stream")
+                .uri(HEALTH_ENDPOINT + "/ping-stream")
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful()

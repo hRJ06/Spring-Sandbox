@@ -4,6 +4,7 @@ import com.Hindol.Reactive_Programming.DTO.BookDTO;
 import com.Hindol.Reactive_Programming.Entity.Book;
 import com.Hindol.Reactive_Programming.Service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -18,11 +19,12 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("")
-    public Flux<Book> getAllBooks() {
+    public Flux<BookDTO> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @PostMapping("/{authorId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<BookDTO> createBook(@RequestBody BookDTO bookDTO, @PathVariable("authorId") Long authorId) {
         return bookService.createBook(bookDTO, authorId);
     }
@@ -33,7 +35,13 @@ public class BookController {
     }
 
     @DeleteMapping("/{bookId}")
-    public Mono<ResponseEntity<Void>> deleteBookById(@PathVariable("bookId") Long bookId) {
-        return bookService.deleteBook(bookId).then(Mono.just(ResponseEntity.noContent().build()));
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteBookById(@PathVariable("bookId") Long bookId) {
+        return bookService.deleteBook(bookId);
+    }
+
+    @PutMapping("/{bookId}")
+    public Mono<BookDTO> updateBookById(@PathVariable("bookId") Long bookId, @RequestBody BookDTO bookDTO) {
+        return bookService.updateBook(bookId, bookDTO);
     }
 }

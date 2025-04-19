@@ -21,8 +21,9 @@ public class BookServiceImplementation implements BookService {
     private final BookMapper bookMapper;
 
     @Override
-    public Flux<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Flux<BookDTO> getAllBooks() {
+        return bookRepository.findAll()
+                .map(bookMapper::entityToDto);
     }
 
     @Override
@@ -42,6 +43,18 @@ public class BookServiceImplementation implements BookService {
     public Mono<BookDTO> getBook(Long bookId) {
         return bookRepository.findById(bookId)
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Book", "ID", String.valueOf(bookId))))
+                .map(bookMapper::entityToDto);
+    }
+
+    @Override
+    public Mono<BookDTO> updateBook(Long bookId, BookDTO bookDTO) {
+        return bookRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Book", "ID", String.valueOf(bookId))))
+                .flatMap(book -> {
+                    book.setName(bookDTO.getName());
+                    book.setDescription(bookDTO.getDescription());
+                    return bookRepository.save(book);
+                })
                 .map(bookMapper::entityToDto);
     }
 
