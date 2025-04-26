@@ -1,6 +1,8 @@
 package com.Hindol.BookService.Service.Implementation;
 
+import com.Hindol.BookService.Client.ReviewClient;
 import com.Hindol.BookService.DTO.BookDTO;
+import com.Hindol.BookService.DTO.ReviewDTO;
 import com.Hindol.BookService.Exception.ResourceNotFoundException;
 import com.Hindol.BookService.Mapper.BookMapper;
 import com.Hindol.BookService.Repository.BookRepository;
@@ -18,6 +20,7 @@ public class BookServiceImplementation implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final ReviewClient reviewClient;
 
     @Override
     public Flux<BookDTO> getAllBooks() {
@@ -32,10 +35,7 @@ public class BookServiceImplementation implements BookService {
                 .doOnNext(book -> book.setAuthorId(authorId))
                 .flatMap(bookRepository::save)
                 .map(bookMapper::entityToDto)
-                .onErrorResume(e -> {
-                    log.error("Error occurred while saving book : {}", e.getMessage());
-                    return Mono.empty();
-                });
+                .onErrorResume(e -> Mono.error(new RuntimeException(e)));
     }
 
     @Override
@@ -62,5 +62,10 @@ public class BookServiceImplementation implements BookService {
         return bookRepository.findById(bookId)
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Book", "ID", String.valueOf(bookId))))
                 .flatMap(bookRepository::delete);
+    }
+
+    @Override
+    public Mono<ReviewDTO> getReview(Long bookId) {
+        return reviewClient.getReview(bookId);
     }
 }

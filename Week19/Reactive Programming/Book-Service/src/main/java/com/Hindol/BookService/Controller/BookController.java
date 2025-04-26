@@ -1,6 +1,7 @@
 package com.Hindol.BookService.Controller;
 
 import com.Hindol.BookService.DTO.BookDTO;
+import com.Hindol.BookService.DTO.ReviewDTO;
 import com.Hindol.BookService.Service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,9 @@ public class BookController {
     public Mono<BookDTO> getBookById(@PathVariable("bookId") Long bookId) {
         return bookService.getBook(bookId);
     }
+
+    @GetMapping("/review/{bookId}")
+    public Mono<ReviewDTO> getReview(@PathVariable("bookId") Long bookId) { return bookService.getReview(bookId); }
 
     @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

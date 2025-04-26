@@ -1,7 +1,6 @@
-package com.Hindol.BookService.Advice;
+package com.Hindol.ReviewService.Advice;
 
-import com.Hindol.BookService.Exception.ClientException;
-import com.Hindol.BookService.Exception.ResourceNotFoundException;
+import com.Hindol.ReviewService.Exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +16,6 @@ public class GlobalExceptionHandler {
         log.error("No resource found of Type : {}, with {} : {}", ex.getType(), ex.getProperty(), ex.getValue());
         APIError apiError = new APIError(ex.getLocalizedMessage(), HttpStatus.NOT_FOUND);
         return Mono.just(new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND));
-    }
-
-    @ExceptionHandler(ClientException.class)
-    public Mono<ResponseEntity<APIError>> handleClientException(ClientException ex) {
-        log.error(ex.getMessage());
-        APIError apiError = new APIError(ex.getLocalizedMessage(), ex.getHttpStatus());
-        return Mono.just(new ResponseEntity<>(apiError, ex.getHttpStatus()));
     }
 
     @ExceptionHandler(RuntimeException.class)
