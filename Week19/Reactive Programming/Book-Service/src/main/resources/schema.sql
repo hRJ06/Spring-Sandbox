@@ -8,5 +8,5 @@ CREATE TABLE books (
 CREATE TABLE authors (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
-    phoneNo VARCHAR(255)
+    phone_no VARCHAR(255)
 );

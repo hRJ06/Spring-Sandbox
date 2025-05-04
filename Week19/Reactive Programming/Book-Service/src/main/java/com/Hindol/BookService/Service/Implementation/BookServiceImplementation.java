@@ -61,11 +61,14 @@ public class BookServiceImplementation implements BookService {
     public Mono<Void> deleteBook(Long bookId) {
         return bookRepository.findById(bookId)
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("Book", "ID", String.valueOf(bookId))))
-                .flatMap(bookRepository::delete);
+                .flatMap(bookRepository::delete)
+                .then(reviewClient.deleteReview(bookId));
     }
 
     @Override
-    public Mono<ReviewDTO> getReview(Long bookId) {
-        return reviewClient.getReview(bookId);
+    public Flux<ReviewDTO> getReview(Long bookId) {
+        return bookRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Book", "ID", String.valueOf(bookId))))
+                .thenMany(reviewClient.getReview(bookId));
     }
 }

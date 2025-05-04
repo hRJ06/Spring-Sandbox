@@ -16,7 +16,7 @@ class HealthControllerTest {
     @Autowired
     WebTestClient webTestClient;
 
-    private static String HEALTH_ENDPOINT = "/api/v1/health/";
+    private static String HEALTH_ENDPOINT = "/api/v1/book-service/health/";
     @Test
     void checkHealth() {
 

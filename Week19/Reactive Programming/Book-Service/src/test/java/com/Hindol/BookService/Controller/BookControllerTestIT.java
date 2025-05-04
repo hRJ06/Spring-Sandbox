@@ -1,22 +1,28 @@
 package com.Hindol.BookService.Controller;
 
 import com.Hindol.BookService.DTO.BookDTO;
+import com.Hindol.BookService.DTO.ReviewDTO;
 import com.Hindol.BookService.Entity.Book;
 import com.Hindol.BookService.Repository.BookRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
-class BookControllerTestIT {
+@AutoConfigureWireMock(port = 8084)
+@TestPropertySource (
+        properties = {
+                "restClient.review-service-url=http://localhost:8084/api/v1/review-service"
+        }
+)
+class BookControllerTestIT extends AbstractITTest {
     @Autowired
     WebTestClient webTestClient;
 
@@ -28,7 +34,7 @@ class BookControllerTestIT {
         bookRepository.deleteAll().block();
     }
 
-    private static final String BOOK_ENDPOINT = "/api/v1/book";
+    private static final String BOOK_ENDPOINT = "/api/v1/book-service";
 
     @Test
     void createBook() {
@@ -118,6 +124,11 @@ class BookControllerTestIT {
         var bookInfo = new Book(null, "Java", "Basic of Java", 1L);
         var savedBook = bookRepository.save(bookInfo).block();
         Long id = savedBook.getId();
+        stubFor(delete(urlEqualTo("/api/v1/review-service/book/" + id))
+                .willReturn(aResponse()
+                        .withStatus(204))
+        );
+
 
         /* Act & Assert */
         webTestClient.delete()
@@ -125,5 +136,26 @@ class BookControllerTestIT {
                 .exchange()
                 .expectStatus()
                 .isNoContent();
+    }
+
+    @Test
+    void getReview() {
+        /* Arrange */
+        var bookInfo = new Book(null, "Java", "Basic of Java", 1L);
+        var savedBook = bookRepository.save(bookInfo).block();
+        Long id = savedBook.getId();
+        stubFor(get(urlEqualTo("/api/v1/review-service/book/" + id))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("review.json"))
+        );
+
+        /* Act */
+        webTestClient.get()
+                .uri(BOOK_ENDPOINT + "/{bookId}/reviews", id)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(ReviewDTO.class)
+                .hasSize(3);
     }
 }

@@ -5,16 +5,13 @@ import com.Hindol.BookService.Repository.AuthorRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
-class AuthorControllerTestIT {
+
+class AuthorControllerTestIT extends AbstractITTest {
     @Autowired
     WebTestClient webTestClient;
 
@@ -26,7 +23,7 @@ class AuthorControllerTestIT {
         authorRepository.deleteAll().block();
     }
 
-    private static final String BOOK_ENDPOINT = "/api/v1/author";
+    private static final String BOOK_ENDPOINT = "/api/v1/book-service/author";
 
     @Test
     void createAuthor() {

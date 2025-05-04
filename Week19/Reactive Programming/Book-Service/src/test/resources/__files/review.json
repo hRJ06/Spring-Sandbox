@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "bookId": 2,
+    "comment": "An insightful and gripping read!",
+    "rating": 4.5
+  },
+  {
+    "id": 2,
+    "bookId": 2,
+    "comment": "Didn't meet my expectations, but had a few good moments.",
+    "rating": 3.0
+  },
+  {
+    "id": 3,
+    "bookId": 2,
+    "comment": "Thorough and well-structured. Great for beginners!",
+    "rating": 4.2
+  }
+]

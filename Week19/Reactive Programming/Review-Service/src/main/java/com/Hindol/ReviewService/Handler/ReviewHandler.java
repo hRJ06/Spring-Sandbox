@@ -7,7 +7,6 @@ import com.Hindol.ReviewService.Repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -59,8 +58,14 @@ public class ReviewHandler {
         Long bookId = Long.valueOf(serverRequest.pathVariable("bookId"));
 
         return reviewRepository.findByBookId(bookId)
-                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Review", "bookId", String.valueOf(bookId))))
                 .map(reviewMapper::entityToDTO)
+                .collectList()
                 .flatMap(ServerResponse.ok()::bodyValue);
+    }
+
+    public Mono<ServerResponse> deleteReviewByBookId(ServerRequest serverRequest) {
+        Long bookId = Long.valueOf(serverRequest.pathVariable("bookId"));
+        return reviewRepository.deleteByBookId(bookId)
+                .then(ServerResponse.status(HttpStatus.OK).build());
     }
 }

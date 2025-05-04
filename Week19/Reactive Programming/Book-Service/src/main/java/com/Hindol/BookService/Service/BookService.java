@@ -11,5 +11,5 @@ public interface BookService {
    Mono<BookDTO> getBook(Long bookId);
    Mono<BookDTO> updateBook(Long bookId, BookDTO bookDTO);
    Mono<Void> deleteBook(Long bookId);
-   Mono<ReviewDTO> getReview(Long bookId);
+   Flux<ReviewDTO> getReview(Long bookId);
 }

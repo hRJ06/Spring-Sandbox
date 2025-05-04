@@ -33,8 +33,8 @@ public class BookController {
         return bookService.getBook(bookId);
     }
 
-    @GetMapping("/review/{bookId}")
-    public Mono<ReviewDTO> getReview(@PathVariable("bookId") Long bookId) { return bookService.getReview(bookId); }
+    @GetMapping("/{bookId}/reviews")
+    public Flux<ReviewDTO> getReview(@PathVariable("bookId") Long bookId) { return bookService.getReview(bookId); }
 
     @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

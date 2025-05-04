@@ -4,13 +4,12 @@ import com.Hindol.BookService.Entity.Author;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataR2dbcTest
-class AuthorRepositoryTest {
+
+class AuthorRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private AuthorRepository authorRepository;
 

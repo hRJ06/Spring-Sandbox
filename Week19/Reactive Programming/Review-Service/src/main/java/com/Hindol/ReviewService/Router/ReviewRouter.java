@@ -20,9 +20,10 @@ public class ReviewRouter {
                             .GET("/health/ping", request -> ServerResponse.ok().bodyValue(APPLICATION_HEALTH_ENDPOINT_PING))
                             .POST("", reviewHandler::addReview)
                             .GET("", reviewHandler::getReview)
-                            .GET("/{bookId}", reviewHandler::getReviewByBookId)
+                            .GET("/book/{bookId}", reviewHandler::getReviewByBookId)
                             .PUT("/{reviewId}", reviewHandler::updateReview)
-                            .DELETE("/{reviewId}", reviewHandler::deleteReview);
+                            .DELETE("/{reviewId}", reviewHandler::deleteReview)
+                            .DELETE("/book/{bookId}", reviewHandler::deleteReviewByBookId);
                 })
                 .build();
     }
