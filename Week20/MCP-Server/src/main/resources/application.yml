@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mcp-db
+    username: root
+    password: rootMySQL
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  ai:
+    mcp:
+      server:
+        name: account-mcp-server
+        version: 1.0.0
+        type: SYNC
+        stdio:
+          enabled: false
+        sse-message-endpoint: /mcp/message
+
+
+logging.level.org.springframework.ai: DEBUG
+
+server:
+  port: 8060
