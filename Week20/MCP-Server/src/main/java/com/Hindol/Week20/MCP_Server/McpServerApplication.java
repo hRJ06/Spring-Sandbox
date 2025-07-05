@@ -1,6 +1,6 @@
 package com.Hindol.Week20.MCP_Server;
 
-import com.Hindol.Week20.MCP_Server.tools.SellerAccountTools;
+import com.Hindol.Week20.MCP_Server.Tool.SellerAccountTool;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
@@ -15,7 +15,7 @@ public class McpServerApplication {
 	}
 
 	@Bean
-	public ToolCallbackProvider tools(SellerAccountTools sellerAccountTool) {
+	public ToolCallbackProvider tools(SellerAccountTool sellerAccountTool) {
 		return MethodToolCallbackProvider.builder()
 				.toolObjects(sellerAccountTool)
 				.build();

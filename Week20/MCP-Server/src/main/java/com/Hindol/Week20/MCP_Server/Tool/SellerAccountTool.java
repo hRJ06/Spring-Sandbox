@@ -1,4 +1,4 @@
-package com.Hindol.Week20.MCP_Server.tools;
+package com.Hindol.Week20.MCP_Server.Tool;
 
 import com.Hindol.Week20.MCP_Server.Entity.SellerAccount;
 import com.Hindol.Week20.MCP_Server.Repository.SellerAccountRepository;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SellerAccountTools {
+public class SellerAccountTool {
     private final SellerAccountRepository sellerAccountRepository;
 
-    public SellerAccountTools(SellerAccountRepository sellerAccountRepository) {
+    public SellerAccountTool(SellerAccountRepository sellerAccountRepository) {
         this.sellerAccountRepository = sellerAccountRepository;
     }
 
@@ -26,7 +26,7 @@ public class SellerAccountTools {
             @ToolParam(description = "Seller Account Name") String name) {
         List<SellerAccount> accountList = sellerAccountRepository.findByName(name);
         StringBuilder result = new StringBuilder();
-        for (SellerAccount account : accountList) {
+        for(SellerAccount account : accountList) {
             result.append(account.toString()).append("\n");
         }
         return result.toString();
@@ -42,7 +42,7 @@ public class SellerAccountTools {
             @ToolParam(description = "Seller Account owner") String owner) {
         List<SellerAccount> accountList = sellerAccountRepository.findByOwner(owner);
         StringBuilder result = new StringBuilder();
-        for (SellerAccount account : accountList) {
+        for(SellerAccount account : accountList) {
             result.append(account.toString()).append("\n");
         }
         return result.toString();
