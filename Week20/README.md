@@ -1,3 +1,3 @@
 # Ollama MCP Architecture 
 
-![Architecture Diagram](https://github.com/user-attachments/assets/761796b1-1c4f-4a22-a483-33710717a463)
+![Architecture Diagram](https://github.com/user-attachments/assets/c5e1bc09-21b7-4ae4-a26b-605cb4cbf6ea)
