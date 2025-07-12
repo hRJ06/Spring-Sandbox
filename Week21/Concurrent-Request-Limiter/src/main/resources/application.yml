@@ -1,0 +1,5 @@
+spring:
+    application.name: Concurrent-Request-Limiter
+limiter:
+    max-concurrent-request: 5
+
