@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  application:
+    name: Request-Rate-Limiter-API-Gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: application-route
+              uri: http://localhost:8080
+              predicates:
+                - Path=/api/data
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 20
+                    redis-rate-limiter.burstCapacity: 40
