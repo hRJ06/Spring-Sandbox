@@ -20,8 +20,12 @@ public class UserController {
     }
 
     @PutMapping("/rent")
-    public ResponseEntity<?> rentBook(@RequestParam("userId") Long userId, @RequestParam("bookId") Long bookId) {
-        userService.rentBook(userId, bookId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDTO> rentBook(@RequestParam("userId") Long userId, @RequestParam("bookId") Long bookId) {
+        return ResponseEntity.ok(userService.rentBook(userId, bookId));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserDTO> getProfile(@RequestParam("userId") Long userId) {
+        return ResponseEntity.ok(userService.getProfile(userId));
     }
 }

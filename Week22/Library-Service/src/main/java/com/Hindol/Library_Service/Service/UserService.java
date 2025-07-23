@@ -4,5 +4,6 @@ import com.Hindol.Library_Service.DTO.UserDTO;
 
 public interface UserService {
     UserDTO registerUser(UserDTO userDTO);
-    void rentBook(Long userId, Long bookId);
+    UserDTO rentBook(Long userId, Long bookId);
+    UserDTO getProfile(Long userId);
 }
