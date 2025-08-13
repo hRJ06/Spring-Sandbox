@@ -2,6 +2,7 @@ package com.Hindol.Book_Service.Service.Implementation;
 
 import com.Hindol.Book_Service.DTO.BookDTO;
 import com.Hindol.Book_Service.Entity.BookEntity;
+import com.Hindol.Book_Service.Exception.ResourceNotFoundException;
 import com.Hindol.Book_Service.Repository.BookRepository;
 import com.Hindol.Book_Service.Service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class BookServiceImplementation implements BookService {
     public BookDTO getBook(Long bookId) {
         boolean exist = bookRepository.existsById(bookId);
         if(!exist) {
-            return null;
+            throw new ResourceNotFoundException("No Book exist with ID - " + bookId);
         }
         BookEntity book = bookRepository.findById(bookId).get();
         return modelMapper.map(book, BookDTO.class);

@@ -5,6 +5,7 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import com.Hindol.Library_Service.DTO.UserDTO;
+import com.Hindol.Library_Service.Exception.ResourceNotFoundException;
 import com.Hindol.Library_Service.LibraryServiceApplication;
 import com.Hindol.Library_Service.Service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +29,7 @@ public class PactConsumerTest {
         return provider.given("book exist")
                 .uponReceiving("get book detail")
                 .path("/book/get")
-                .query("id=2")
+                .query("id=4")
                 .willRespondWith()
                 .status(200)
                 .body(new PactDslJsonBody()
@@ -38,13 +39,33 @@ public class PactConsumerTest {
 
     }
 
+    @Pact(consumer = "BookDetail")
+    public RequestResponsePact getBookNotExist(PactDslWithProvider provider) {
+        return provider.given("book not exist")
+                .uponReceiving("get book detail")
+                .path("/book/get")
+                .query("id=2")
+                .willRespondWith()
+                .status(404)
+                .toPact();
+    }
     @Test
     @PactTestFor(pactMethod = "getBookDetail", port = "9999")
     public void rentBook() {
-        Long userId = 2L, bookId = 2L;
+        Long userId = 2L, bookId = 4L;
         UserDTO user = userService.rentBook(userId, bookId);
         Assertions.assertTrue(user.getRentedBook().stream()
                 .anyMatch(id -> id.equals(bookId)));
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "getBookNotExist", port = "9999")
+    public void rentBook_whenBookNotExist() {
+        Long userId = 2L, bookId = 2L;
+        Assertions.assertThrows(
+                ResourceNotFoundException.class,
+                () -> userService.rentBook(userId, bookId)
+        );
     }
 
 }

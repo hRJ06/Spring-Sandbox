@@ -3,12 +3,15 @@ package com.Hindol.Library_Service.Service.Implementation;
 import com.Hindol.Library_Service.DTO.BookDTO;
 import com.Hindol.Library_Service.DTO.UserDTO;
 import com.Hindol.Library_Service.Entity.UserEntity;
+import com.Hindol.Library_Service.Exception.ResourceNotFoundException;
 import com.Hindol.Library_Service.Repository.UserRepository;
 import com.Hindol.Library_Service.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,7 +34,12 @@ public class UserServiceImplementation implements UserService {
                 .path("/get")
                 .queryParam("id", bookId)
                 .toUriString();
-        return restTemplate.getForObject(url, BookDTO.class);
+        try {
+            ResponseEntity<BookDTO> response = restTemplate.getForEntity(url, BookDTO.class);
+            return response.getBody();
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new ResourceNotFoundException("No Book exist with ID - " + bookId);
+        }
     }
 
     @Override
@@ -44,12 +52,8 @@ public class UserServiceImplementation implements UserService {
     @Override
     public UserDTO rentBook(Long userId, Long bookId) {
         BookDTO bookDTO = fetchBook(bookId);
-        if(Objects.isNull(bookDTO)) {
-            throw new RuntimeException("Book with ID " + bookId + " not found.");
-        }
-
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User with ID " + userId + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
 
         user.getRentedBook().add(bookDTO.getId());
         UserEntity savedUser = userRepository.save(user);
@@ -59,7 +63,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public UserDTO getProfile(Long userId) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User with ID " + userId + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
 
         List<BookDTO> bookList = user.getRentedBook().stream()
                 .map(this::fetchBook)
