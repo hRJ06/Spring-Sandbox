@@ -4,6 +4,8 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.StateChangeAction;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import com.Hindol.Book_Service.BookServiceApplication;
 import com.Hindol.Book_Service.Entity.BookEntity;
@@ -19,7 +21,11 @@ import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BookServiceApplication.class)
 @Provider("Book-Service")
-@PactFolder("pacts")
+/* @PactFolder("pacts") */
+@PactBroker(
+        url = "https://spring-boot.pactflow.io/",
+        authentication = @PactBrokerAuth(token = "${pact.broker.token}")
+)
 public class PactProviderTest {
 
     @Autowired

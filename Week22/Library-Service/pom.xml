@@ -70,6 +70,16 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>au.com.dius.pact.provider</groupId>
+				<artifactId>maven</artifactId>
+				<version>4.1.11</version>
+				<configuration>
+					<pactBrokerUrl>https://spring-boot.pactflow.io/</pactBrokerUrl>
+					<!--suppress UnresolvedMavenProperty -->
+					<pactBrokerToken>${env.PACT_BROKER_TOKEN}</pactBrokerToken>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
