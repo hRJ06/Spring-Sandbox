@@ -1,4 +1,4 @@
-package com.Hindol.Command.Entity;
+package com.Hindol.Command.Event;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import lombok.Builder;

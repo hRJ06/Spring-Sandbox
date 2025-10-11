@@ -1,6 +1,6 @@
 package com.Hindol.Command.Service.Implementation;
 
-import com.Hindol.Command.Entity.OrderEvent;
+import com.Hindol.Command.Event.OrderEvent;
 import com.Hindol.Command.Repository.OrderEventRepository;
 import com.Hindol.Command.Service.OrderEventService;
 import lombok.RequiredArgsConstructor;

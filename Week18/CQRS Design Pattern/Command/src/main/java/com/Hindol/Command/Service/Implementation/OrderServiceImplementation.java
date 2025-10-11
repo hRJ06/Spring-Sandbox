@@ -3,7 +3,7 @@ package com.Hindol.Command.Service.Implementation;
 import com.Hindol.Command.DTO.OrderItemDTO;
 import com.Hindol.Command.DTO.PlaceOrderCommand;
 import com.Hindol.Command.Entity.Order;
-import com.Hindol.Command.Entity.OrderEvent;
+import com.Hindol.Command.Event.OrderEvent;
 import com.Hindol.Command.Entity.OrderItem;
 import com.Hindol.Command.Repository.OrderItemRepository;
 import com.Hindol.Command.Repository.OrderRepository;
@@ -14,11 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-import static com.Hindol.Command.Entity.OrderEventType.ORDER_PLACED;
+import static com.Hindol.Command.Event.OrderEventType.ORDER_PLACED;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +61,7 @@ public class OrderServiceImplementation implements OrderService {
 
         OrderEvent event = OrderEvent.builder()
                 .orderId(order.getId())
-                .timestamp(Instant.now().toString())
+                .timestamp(order.getCreatedAt().toString())
                 .eventType(ORDER_PLACED)
                 .payload(payload)
                 .build();
