@@ -5,6 +5,7 @@ import com.Hindol.Command.DTO.PlaceOrderCommand;
 import com.Hindol.Command.Entity.Order;
 import com.Hindol.Command.Event.OrderEvent;
 import com.Hindol.Command.Entity.OrderItem;
+import com.Hindol.Command.Exception.ResourceNotFoundException;
 import com.Hindol.Command.Repository.OrderItemRepository;
 import com.Hindol.Command.Repository.OrderRepository;
 import com.Hindol.Command.Service.OrderEventService;
@@ -14,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import static com.Hindol.Command.Event.OrderEventType.ORDER_CANCELLED;
 import static com.Hindol.Command.Event.OrderEventType.ORDER_PLACED;
 
 @Service
@@ -51,8 +54,6 @@ public class OrderServiceImplementation implements OrderService {
             log.info("ORDER ITEM - {} saved.", orderItem.getId());
         }
 
-        log.info("Preparing DynamoDB Event.");
-
         Map<String, Object> payload = Map.of(
                 "customerId", command.getCustomerId(),
                 "total", total,
@@ -65,6 +66,24 @@ public class OrderServiceImplementation implements OrderService {
                 .eventType(ORDER_PLACED)
                 .payload(payload)
                 .build();
+
+        orderEventService.pushEvent(event);
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("No Order exist with ID - " + orderId));
+        orderRepository.delete(order);
+        orderItemRepository.deleteAllByOrderId(orderId);
+
+        OrderEvent event = OrderEvent.builder()
+                .orderId(orderId)
+                .timestamp(LocalDateTime.now().toString())
+                .eventType(ORDER_CANCELLED)
+                .build();
+
+        log.info("ORDER - {} deleted.", orderId);
 
         orderEventService.pushEvent(event);
     }

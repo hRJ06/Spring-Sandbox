@@ -1,34 +1,29 @@
 package com.Hindol.Command.Service.Implementation;
 
 import com.Hindol.Command.Event.OrderEvent;
+import com.Hindol.Command.Event.Publisher.OrderEventPublisherFactory;
 import com.Hindol.Command.Repository.OrderEventRepository;
 import com.Hindol.Command.Service.OrderEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OrderEventServiceImplementation implements OrderEventService {
-    @Value("${kafka.topic.order-topic}")
-    private String KAFKA_ORDER_TOPIC;
 
     private final OrderEventRepository orderEventRepository;
-    private final KafkaTemplate<Long, OrderEvent> kafkaTemplate;
+    private final OrderEventPublisherFactory publisherFactory;
 
     @Override
-    @Async
     public void pushEvent(OrderEvent orderEvent) {
-        log.info("Saving Order Event in DynamoDB.");
         orderEventRepository.addEvent(orderEvent);
-        log.info("Order Event saved.");
+        log.info("ORDER event saved for orderId={}", orderEvent.getOrderId());
 
-        log.info("Publishing Kafka Event");
-        kafkaTemplate.send(KAFKA_ORDER_TOPIC, orderEvent.getOrderId(), orderEvent);
-        log.info("Kafka Event published.");
+        var publisher = publisherFactory.getPublisher(orderEvent.getEventType());
+        publisher.publish(orderEvent);
+
+        log.info("Kafka event published for eventType={}", orderEvent.getEventType());
     }
 }

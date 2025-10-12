@@ -5,4 +5,5 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-kafka.topic.order-topic: order_topic
+kafka.topic.order-create-topic: order_create_topic
+kafka.topic.order-cancel-topic: order_cancel_topic
